@@ -72,7 +72,7 @@ void calculateCurveDimensions(char *path, vector<curve> &curves, int number_of_l
     file.open(path, ios::in);
     string str, temp;
     vector<string> tokens;
-    
+
     //we begin from the second line
     getline(file, str);
 
@@ -93,12 +93,12 @@ void calculateCurveDimensions(char *path, vector<curve> &curves, int number_of_l
                 curves.push_back(curve());
                 curves[i].id = number;
                 curves[i].intoCluster = false;
-                cout << "curves["<< i <<"].id: "<< curves[i].id << endl;
+                cout << "curves[" << i << "].id: " << curves[i].id << endl;
             }
             if (countKena == 1)
             {
                 curves[i].dimensions = number;
-                //cout << "curves["<< i <<"].dimensions: "<< curves[i].dimensions << endl;
+                cout << "curves[" << i << "].dimensions: " << curves[i].dimensions << endl;
                 break;
             }
             countKena++;
@@ -106,7 +106,7 @@ void calculateCurveDimensions(char *path, vector<curve> &curves, int number_of_l
     }
     stringstream line(str);
     file.close();
-    cout << "Perasa to close" <<endl;
+    // cout << "Perasa to close" <<endl;
 }
 
 void fillVectorWithCurves(char *path, vector<curve> &curves, int number_of_lines)
@@ -173,9 +173,9 @@ void fillVectorWithCurves(char *path, vector<curve> &curves, int number_of_lines
                 alreadyAllocated = false;
             }
 
-            cout<<endl;
+            // cout << endl;
         }
-        cout << "perase cout" <<endl;
+        cout << "perase cout" << endl;
     }
 
     file.close();
