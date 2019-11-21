@@ -29,7 +29,7 @@ int main(int argc, char const *argv[])
             }
             else
             {
-               strcpy(CONF_PATH, argv[i + 1]);
+                strcpy(CONF_PATH, argv[i + 1]);
             }
         }
         if (strcmp(argv[i], "-o") == 0)
@@ -41,7 +41,7 @@ int main(int argc, char const *argv[])
             }
             else
             {
-               strcpy(OUTPUT_PATH, argv[i + 1]);
+                strcpy(OUTPUT_PATH, argv[i + 1]);
             }
         }
         //TODO (optional) take "-complete" as if argument and do stuff
@@ -57,10 +57,10 @@ int main(int argc, char const *argv[])
     {
         curve_file = 1;
     }
-    
+
     cout << "Input size: " << INPUT_SIZE << ", dimension size:" << DIMENSIONS << endl;
 
-    if (vector_file)// case type is vector
+    if (vector_file) // case type is vector
     {
         array_of_vectors = new vector_struct[INPUT_SIZE];
         fillVectors(DIMENSIONS, INPUT_SIZE, INPUT_PATH, array_of_vectors);
