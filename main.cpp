@@ -2,12 +2,17 @@
 #include <string.h>
 #include "readFunctions.h"
 #include "vector.h"
+#include "basicStructs.h"
+
 using namespace std;
 int main(int argc, char const *argv[])
 {
     unsigned int DIMENSIONS = 0, INPUT_SIZE = 0, i, curve_file = 0, vector_file = 0;
-    char INPUT_PATH[300];
+    char INPUT_PATH[300], CONF_PATH[300], OUTPUT_PATH[300];
     vector_struct *array_of_vectors;
+
+    vector<curve> curves;
+
     // read args
     for (i = 1; i < argc; i++)
     {
@@ -15,6 +20,31 @@ int main(int argc, char const *argv[])
         {
             strcpy(INPUT_PATH, argv[i + 1]);
         }
+        if (strcmp(argv[i], "-c") == 0)
+        {
+            if (argc - 1 < i + 1)
+            {
+
+                cout << "No -c given" << endl;
+            }
+            else
+            {
+               strcpy(CONF_PATH, argv[i + 1]);
+            }
+        }
+        if (strcmp(argv[i], "-o") == 0)
+        {
+            if (argc - 1 < i + 1)
+            {
+
+                cout << "No -o given" << endl;
+            }
+            else
+            {
+               strcpy(OUTPUT_PATH, argv[i + 1]);
+            }
+        }
+        //TODO (optional) take "-complete" as if argument and do stuff
     }
     //calculations
     INPUT_SIZE = calculateInputSize(INPUT_PATH) - 1;
@@ -27,13 +57,20 @@ int main(int argc, char const *argv[])
     {
         curve_file = 1;
     }
-    // case type is vector
-    if (vector_file)
+    
+    cout << "Input size: " << INPUT_SIZE << ", dimension size:" << DIMENSIONS << endl;
+
+    if (vector_file)// case type is vector
     {
         array_of_vectors = new vector_struct[INPUT_SIZE];
         fillVectors(DIMENSIONS, INPUT_SIZE, INPUT_PATH, array_of_vectors);
     }
-    cout << "Input size: " << INPUT_SIZE << ", dimension size:" << DIMENSIONS << endl;
+    else // case type is curve
+    {
+        calculateCurveDimensions(INPUT_PATH, curves, DIMENSIONS);
+        fillVectorWithCurves(INPUT_PATH, curves, DIMENSIONS);
+    }
+    cout << "Vectors are filled" << endl;
 
     /**
      *
