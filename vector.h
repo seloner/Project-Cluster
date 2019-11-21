@@ -8,7 +8,7 @@ using namespace std;
 typedef struct
 {
     vector<double> vectors;
-    unsigned int id;
+    string id;
     bool intoCluster;
 } vector_struct;
 void fillVectors(int dimension, int size, char *input_file_path, vector_struct *vectors_array);

@@ -3,6 +3,9 @@
 #include "readFunctions.h"
 #include "vector.h"
 #include "basicStructs.h"
+#include <stdlib.h>
+#include <time.h>
+#include "initialization.h"
 
 using namespace std;
 int main(int argc, char const *argv[])
@@ -46,6 +49,10 @@ int main(int argc, char const *argv[])
         }
         //TODO (optional) take "-complete" as if argument and do stuff
     }
+
+    // init rand
+    srand(time(NULL));
+
     //calculations
     INPUT_SIZE = calculateInputSize(INPUT_PATH) - 1;
     if (type_of_file(INPUT_PATH) == 0)
@@ -57,20 +64,20 @@ int main(int argc, char const *argv[])
         curve_file = 1;
     }
 
-    cout << "Input size: " << endl;
+    cout << "Input size: " << INPUT_SIZE << endl;
 
     if (vector_file) // case type is vector
     {
         DIMENSIONS = calculateDimension(INPUT_PATH);
         array_of_vectors = new vector_struct[INPUT_SIZE];
         fillVectors(DIMENSIONS, INPUT_SIZE, INPUT_PATH, array_of_vectors);
+        k_means_vector(array_of_vectors, 3, INPUT_SIZE);
     }
     else // case type is curve
     {
         calculateCurveDimensions(INPUT_PATH, curves, INPUT_SIZE);
         fillVectorWithCurves(INPUT_PATH, curves, INPUT_SIZE);
     }
-    cout << "Vectors are filled" << endl;
 
     /**
      *
