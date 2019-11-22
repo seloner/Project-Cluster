@@ -7,6 +7,7 @@
 #include "curves.h"
 #include "initialization.h"
 #include "clusterStructs.h"
+#include "assignment.h"
 
 using namespace std;
 int main(int argc, char const *argv[])
@@ -76,6 +77,10 @@ int main(int argc, char const *argv[])
 
     //check conf file about clusters
     readClusterConf(CONF_PATH, clusterInfo);
+
+    //clusters from random selection
+    vector<clusterarraycurves> lloydAssignmentCurvesArray;
+
     cout << "Input size: " << INPUT_SIZE << endl;
 
     if (vector_file) // case type is vector
@@ -83,14 +88,15 @@ int main(int argc, char const *argv[])
         DIMENSIONS = calculateDimension(INPUT_PATH);
         array_of_vectors = new vector_struct[INPUT_SIZE];
         fillVectors(DIMENSIONS, INPUT_SIZE, INPUT_PATH, array_of_vectors);
-        // random_selection_vector(array_of_vectors, 3, INPUT_SIZE, randomSelectionForPoints);
-        k_means_vector(array_of_vectors, clusterInfo.number_of_clusters, INPUT_SIZE);
+        random_selection_vector(array_of_vectors, clusterInfo.number_of_clusters, INPUT_SIZE, randomSelectionForPoints);
+        //k_means_vector(array_of_vectors, clusterInfo.number_of_clusters, INPUT_SIZE);
     }
     else // case type is curve
     {
         calculateCurveDimensions(INPUT_PATH, curves, INPUT_SIZE);
         fillVectorWithCurves(INPUT_PATH, curves, INPUT_SIZE);
-        random_selection_curves(curves, 3, INPUT_SIZE, randomSelectionForCurves);
+        random_selection_curves(curves, clusterInfo.number_of_clusters, INPUT_SIZE, randomSelectionForCurves);
+        lloydAssignmentCurves(randomSelectionForCurves, lloydAssignmentCurvesArray);
     }
 
     /**

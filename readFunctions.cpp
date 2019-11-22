@@ -92,7 +92,7 @@ void calculateCurveDimensions(char *path, vector<curve> &curves, int number_of_l
             {
                 curves.push_back(curve());
                 curves[i].id = number;
-                curves[i].intoCluster = false;
+                curves[i].intoCluster = 0;
                 cout << "curves[" << i << "].id: " << curves[i].id << endl;
             }
             if (countKena == 1)
@@ -175,7 +175,7 @@ void fillVectorWithCurves(char *path, vector<curve> &curves, int number_of_lines
 
             // cout << endl;
         }
-        cout << "perase cout" << endl;
+        //cout << "perase cout" << endl;
     }
 
     file.close();
