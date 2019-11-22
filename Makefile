@@ -1,7 +1,7 @@
 #include <string>
 OBJS 	= main.o readFunctions.o vector.o printFunctions.o  initialization.o
 SOURCE	= main.cpp readFunctions.cpp vector.cpp printFunctions.cpp initialization.cpp
-HEADER  = basicStructs.h readFunctions.h vector.h printFunctions.h initialization.h
+HEADER  = curveStructs.h readFunctions.h vector.h printFunctions.h initialization.h clusterStructs.h
 OUT  	= cluster
 FLAGS   = -g -c
 CC	= g++

@@ -4,7 +4,8 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include "basicStructs.h"
+#include "curveStructs.h"
+#include "clusterStructs.h"
 
 using namespace std;
 // return 0 vector , return 1 curve
@@ -16,4 +17,8 @@ int calculateDimension(char *path);
 void calculateCurveDimensions(char *path, vector<curve> &curves, int number_of_lines);
 void fillVectorWithCurves(char *path, vector<curve> &curves, int number_of_lines);
 void printCurves(vector<curve> curves, int number_of_lines);
+
+//cluster
+void readClusterConf(char *path, cluster &clusterInfo);
+
 #endif

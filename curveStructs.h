@@ -1,5 +1,5 @@
-#ifndef BASICSTRUCTS_H_
-#define BASICSTRUCTS_H_
+#ifndef CURVESTRUCTS_H_
+#define CURVESTRUCTS_H_
 
 #include <iostream>
 #include <fstream>

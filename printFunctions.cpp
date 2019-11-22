@@ -1,4 +1,4 @@
-#include "basicStructs.h"
+#include "curveStructs.h"
 #include "printFunctions.h"
 
 void printCurves(vector<curve> curves, int number_of_lines)
