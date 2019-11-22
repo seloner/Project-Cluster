@@ -79,7 +79,7 @@ int main(int argc, char const *argv[])
     readClusterConf(CONF_PATH, clusterInfo);
 
     //clusters from random selection
-    vector<clusterarraycurves> lloydAssignmentCurvesArray;
+    vector<clusterarraycurves> lloydAssignmentClusterArray;
 
     cout << "Input size: " << INPUT_SIZE << endl;
 
@@ -96,7 +96,7 @@ int main(int argc, char const *argv[])
         calculateCurveDimensions(INPUT_PATH, curves, INPUT_SIZE);
         fillVectorWithCurves(INPUT_PATH, curves, INPUT_SIZE);
         random_selection_curves(curves, clusterInfo.number_of_clusters, INPUT_SIZE, randomSelectionForCurves);
-        lloydAssignmentCurves(randomSelectionForCurves, lloydAssignmentCurvesArray);
+        lloydAssignmentCurves(curves, randomSelectionForCurves, lloydAssignmentClusterArray);
     }
 
     /**
