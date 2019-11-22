@@ -18,7 +18,7 @@ initialization.o: initialization.cpp
 vector.o: vector.cpp
 	$(CC)  $(FLAGS) vector.cpp
 metrics.o: metrics.cpp
-	$(CC)  $(FLAGS) main.cpp	
+	$(CC)  $(FLAGS) metrics.cpp	
 printFunctions.o: printFunctions.cpp
 	$(CC)  $(FLAGS) printFunctions.cpp
 clean:

@@ -86,7 +86,7 @@ int main(int argc, char const *argv[])
 
         // random_selection_vector(array_of_vectors, 3, INPUT_SIZE, randomSelectionForPoints);
 
-        k_means_vector(array_of_vectors, 3, INPUT_SIZE);
+        k_means_vector(array_of_vectors, clusterInfo.number_of_clusters, INPUT_SIZE);
     }
     else // case type is curve
     {

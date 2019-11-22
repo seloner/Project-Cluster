@@ -6,8 +6,15 @@
 #include "vector.h"
 #include "curveStructs.h"
 #include "metrics.h"
+#include <cmath>
 
 using namespace std;
+typedef struct
+{
+    double start;
+    double end;
+    vector_struct *vector_struct_ptr;
+} probability_space;
 vector<vector_struct> k_means_vector(vector_struct *vectors_array, unsigned int k, unsigned int size);
 void random_selection_vector(vector_struct *vectors_array, unsigned int k, unsigned int size, vector<vector_struct> &allCenters);
 void random_selection_curves(vector<curve> curves, unsigned int k, unsigned int size, vector<curve> &allCenters);
