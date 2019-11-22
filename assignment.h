@@ -6,6 +6,6 @@ using namespace std;
 #include "clusterStructs.h"
 #include "curves.h"
 
-void lloydAssignmentCurves(vector<curve>curves, vector<curve> randomSelectionForCurves,  vector<clusterarraycurves> &lloydAssignmentCurvesArray);
+void lloydAssignmentClusterArray(vector<curve> curves, vector<curve> randomSelectionForCurves, vector<clusterarraycurves> &lloydAssignmentCurvesArray);
 
 #endif
