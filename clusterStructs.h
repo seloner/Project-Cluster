@@ -7,6 +7,7 @@
 #include <string>
 #include <bits/stdc++.h>
 #include <stdlib.h>
+#include <curves.h>
 
 #define CONFLINES 4
 
@@ -19,5 +20,15 @@ typedef struct Cluster
 	int number_of_vector_hash_tables;
     int number_of_vector_hash_functions;
 } cluster;
+
+typedef struct ClusterArray
+{
+    int id;
+    vector<clusternode> node;
+} clusterarray;
+typedef struct ClusterNode
+{
+    curve *machingCurve;
+} clusternode;
 
 #endif
