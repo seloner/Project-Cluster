@@ -18,7 +18,6 @@ int main(int argc, char const *argv[])
     //cluster info from conf
     cluster clusterInfo;
 
-
     //all the curves
     vector<curve> curves;
 
@@ -57,7 +56,7 @@ int main(int argc, char const *argv[])
                 strcpy(OUTPUT_PATH, argv[i + 1]);
             }
         }
-        
+
         //TODO (optional) take "-complete" as if argument and do stuff
     }
 
@@ -77,8 +76,6 @@ int main(int argc, char const *argv[])
 
     //check conf file about clusters
     readClusterConf(CONF_PATH, clusterInfo);
-    cout << "test cluster: "<<clusterInfo.number_of_clusters <<endl;
-
     cout << "Input size: " << INPUT_SIZE << endl;
 
     if (vector_file) // case type is vector
@@ -87,7 +84,7 @@ int main(int argc, char const *argv[])
         array_of_vectors = new vector_struct[INPUT_SIZE];
         fillVectors(DIMENSIONS, INPUT_SIZE, INPUT_PATH, array_of_vectors);
 
-        random_selection_vector(array_of_vectors, 3, INPUT_SIZE, randomSelectionForPoints);
+        // random_selection_vector(array_of_vectors, 3, INPUT_SIZE, randomSelectionForPoints);
 
         k_means_vector(array_of_vectors, 3, INPUT_SIZE);
     }
@@ -95,10 +92,8 @@ int main(int argc, char const *argv[])
     {
         calculateCurveDimensions(INPUT_PATH, curves, INPUT_SIZE);
         fillVectorWithCurves(INPUT_PATH, curves, INPUT_SIZE);
-
         random_selection_curves(curves, 3, INPUT_SIZE, randomSelectionForCurves);
     }
-
 
     /**
      *
