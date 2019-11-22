@@ -4,7 +4,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include "curveStructs.h"
+#include "curves.h"
 #include "clusterStructs.h"
 
 using namespace std;

@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "readFunctions.h"
-#include "curveStructs.h"
+#include "curves.h"
 #include "initialization.h"
 #include "clusterStructs.h"
 

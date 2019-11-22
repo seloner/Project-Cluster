@@ -1,7 +1,7 @@
 #include <string>
-OBJS 	= main.o readFunctions.o vector.o printFunctions.o  initialization.o metrics.o assignment.o
-SOURCE	= main.cpp readFunctions.cpp vector.cpp printFunctions.cpp initialization.cpp metrics.cpp assignment.cpp
-HEADER  = curveStructs.h readFunctions.h vector.h printFunctions.h initialization.h clusterStructs.h metrics.h assignment.h
+OBJS 	= main.o readFunctions.o vector.o printFunctions.o  initialization.o metrics.o assignment.o curves.o
+SOURCE	= main.cpp readFunctions.cpp vector.cpp printFunctions.cpp initialization.cpp metrics.cpp assignment.cpp curves.cpp
+HEADER  = readFunctions.h vector.h printFunctions.h initialization.h clusterStructs.h metrics.h assignment.h curves.h
 OUT  	= cluster
 FLAGS   = -g -c
 CC	= g++
@@ -17,6 +17,8 @@ initialization.o: initialization.cpp
 	$(CC)  $(FLAGS) initialization.cpp
 vector.o: vector.cpp
 	$(CC)  $(FLAGS) vector.cpp
+curves.o: curves.cpp
+	$(CC)  $(FLAGS) curves.cpp
 metrics.o: metrics.cpp
 	$(CC)  $(FLAGS) metrics.cpp	
 assignment.o: assignment.cpp
