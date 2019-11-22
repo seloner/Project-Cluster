@@ -83,9 +83,7 @@ int main(int argc, char const *argv[])
         DIMENSIONS = calculateDimension(INPUT_PATH);
         array_of_vectors = new vector_struct[INPUT_SIZE];
         fillVectors(DIMENSIONS, INPUT_SIZE, INPUT_PATH, array_of_vectors);
-
         // random_selection_vector(array_of_vectors, 3, INPUT_SIZE, randomSelectionForPoints);
-
         k_means_vector(array_of_vectors, clusterInfo.number_of_clusters, INPUT_SIZE);
     }
     else // case type is curve

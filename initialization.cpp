@@ -31,11 +31,15 @@ vector<vector_struct> k_means_vector(vector_struct *vectors_array, unsigned int 
             }
         };
         probability = static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / sum));
+        //loop through every probability space
         for (unsigned k = 0; k < probability_density.size(); k++)
         {
+            //check if probability space is smaller than current space
             if (probability < probability_density[k].end)
             {
+                //new centre found
                 centres.push_back(*init_centre);
+                //init the centre so to start again until we have k centres
                 init_centre = probability_density[k].vector_struct_ptr;
                 break;
             }
