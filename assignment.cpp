@@ -1,6 +1,6 @@
 #include "assignment.h"
 
-void lloydAssignmentClusterArray(vector<curve> curves, vector<curve> randomSelectionForCurves, vector<clusterarraycurves> &lloydAssignmentClusterArray)
+void lloydAssignmentClusterArrayFunction(vector<curve> curves, vector<curve> randomSelectionForCurves, vector<clusterarraycurves> &lloydAssignmentClusterArray)
 {
     int insideElements = 0;
     clusterarraycurves clusterarraycurve;

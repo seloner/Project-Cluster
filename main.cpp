@@ -95,9 +95,9 @@ int main(int argc, char const *argv[])
     {
         calculateCurveDimensions(INPUT_PATH, curves, INPUT_SIZE);
         fillVectorWithCurves(INPUT_PATH, curves, INPUT_SIZE);
-        k_means_curve(curves, clusterInfo.number_of_clusters, INPUT_SIZE);
-        // random_selection_curves(curves, clusterInfo.number_of_clusters, INPUT_SIZE, randomSelectionForCurves);
-        //lloydAssignmentClusterArray(curves, randomSelectionForCurves, lloydAssignmentClusterArray);
+        //k_means_curve(curves, clusterInfo.number_of_clusters, INPUT_SIZE);
+        random_selection_curves(curves, clusterInfo.number_of_clusters, INPUT_SIZE, randomSelectionForCurves);
+        lloydAssignmentClusterArrayFunction(curves, randomSelectionForCurves, lloydAssignmentClusterArray);
     }
 
     /**
