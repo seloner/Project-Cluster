@@ -93,12 +93,12 @@ void calculateCurveDimensions(char *path, vector<curve> &curves, int number_of_l
                 curves.push_back(curve());
                 curves[i].id = number;
                 curves[i].intoCluster = 0;
-                cout << "curves[" << i << "].id: " << curves[i].id << endl;
+                // cout << "curves[" << i << "].id: " << curves[i].id << endl;
             }
             if (countKena == 1)
             {
                 curves[i].dimensions = number;
-                cout << "curves[" << i << "].dimensions: " << curves[i].dimensions << endl;
+                // cout << "curves[" << i << "].dimensions: " << curves[i].dimensions << endl;
                 break;
             }
             countKena++;
