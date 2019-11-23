@@ -1,5 +1,16 @@
 #include "assignment.h"
 
+void lloydAssignmentClusterCurvesUpdate(vector<curve> curves, vector<clusterarraycurves> &lloydAssignmentClusterArray)
+{
+    double min_distance = 0, distance = 0;
+
+    for (unsigned j = 0; j < lloydAssignmentClusterArray.size(); j++)
+    {
+        cout << j << endl;
+        cout << lloydAssignmentClusterArray[j].centerOfCluster.machingCurve->id << endl;
+    }
+}
+
 void lloydAssignmentClusterCurvesFunction(vector<curve> curves, vector<curve> randomSelectionForCurves, vector<clusterarraycurves> &lloydAssignmentClusterArray)
 {
     int insideElements = 0;
@@ -11,7 +22,7 @@ void lloydAssignmentClusterCurvesFunction(vector<curve> curves, vector<curve> ra
         lloydAssignmentClusterArray.push_back(clusterarraycurve);
 
         //test assignment
-        cout << "Assign: " << lloydAssignmentClusterArray[insideElements].centerOfCluster.machingCurve->id << " to lloyd vector as first try of centers" << endl;
+        //cout << "Assign: " << lloydAssignmentClusterArray[insideElements].centerOfCluster.machingCurve->id << " to lloyd vector as first try of centers" << endl;
 
         insideElements++;
     }
@@ -23,7 +34,7 @@ void lloydAssignmentClusterCurvesFunction(vector<curve> curves, vector<curve> ra
     //pame na ftiaxoume ta kentra
     for (int kampilesLoop = 0; kampilesLoop < curves.size(); kampilesLoop++)
     {
-        for(int kentraLoop = 0; kentraLoop < randomSelectionForCurves.size(); kentraLoop++)
+        for (int kentraLoop = 0; kentraLoop < randomSelectionForCurves.size(); kentraLoop++)
         {
             int distance = dtw(randomSelectionForCurves[kentraLoop], curves[kampilesLoop]);
             if (kentraLoop == 0)
@@ -49,16 +60,17 @@ void lloydAssignmentClusterCurvesFunction(vector<curve> curves, vector<curve> ra
     }
 
     //test results
-    cout <<endl<<"Clusters from phase 1:"<<endl;
-    for (int i = 0; i < lloydAssignmentClusterArray.size(); i++)
-    {
-        cout<<"Cluster: "<<i<<endl;
-        cout<<"Center (curve id): "<<lloydAssignmentClusterArray[i].centerOfCluster.machingCurve->id<<endl;
-        cout<<"Curves Inside (ids)>>"<<endl;
-        for(int j=0; j<lloydAssignmentClusterArray[i].nodes.size(); j++)
-        {
-            cout<<lloydAssignmentClusterArray[i].nodes[j].machingCurve->id<<", ";
-        }
-        cout <<endl;
-    }
+    //cout << endl
+    //<< "Clusters from phase 1:" << endl;
+    // for (int i = 0; i < lloydAssignmentClusterArray.size(); i++)
+    // {
+    //     // cout << "Cluster: " << i << endl;
+    //     // cout << "Center (curve id): " << lloydAssignmentClusterArray[i].centerOfCluster.machingCurve->id << endl;
+    //     // cout << "Curves Inside (ids)>>" << endl;
+    //     // for (int j = 0; j < lloydAssignmentClusterArray[i].nodes.size(); j++)
+    //     // {
+    //     //     cout << lloydAssignmentClusterArray[i].nodes[j].machingCurve->id << ", ";
+    //     // }
+    //     // cout << endl;
+    // }
 }
