@@ -1,6 +1,6 @@
 #include "assignment.h"
 
-void lloydAssignmentClusterArrayFunction(vector<curve> curves, vector<curve> randomSelectionForCurves, vector<clusterarraycurves> &lloydAssignmentClusterArray)
+void lloydAssignmentClusterCurvesFunction(vector<curve> curves, vector<curve> randomSelectionForCurves, vector<clusterarraycurves> &lloydAssignmentClusterArray)
 {
     int insideElements = 0;
     clusterarraycurves clusterarraycurve;
@@ -44,6 +44,7 @@ void lloydAssignmentClusterArrayFunction(vector<curve> curves, vector<curve> ran
                 }
             }
         }
+        //TODO (maybe not ?) allagi tou intoCLuster
         lloydAssignmentClusterArray[candidateCluster].nodes.push_back(nodeCurveToPass);
     }
 

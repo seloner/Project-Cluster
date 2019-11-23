@@ -8,6 +8,7 @@ using namespace std;
 #include <math.h>
 #include "dtw.h"
 
-void lloydAssignmentClusterArrayFunction(vector<curve> curves, vector<curve> randomSelectionForCurves, vector<clusterarraycurves> &lloydAssignmentCurvesArray);
+void lloydAssignmentClusterCurvesFunction(vector<curve> curves, vector<curve> randomSelectionForCurves, vector<clusterarraycurves> &lloydAssignmentCurvesArray);
+void lloydAssignmentClusterPointsFunction();
 
 #endif
