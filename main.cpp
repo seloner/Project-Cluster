@@ -89,6 +89,7 @@ int main(int argc, char const *argv[])
         DIMENSIONS = calculateDimension(INPUT_PATH);
         array_of_vectors = new vector_struct[INPUT_SIZE];
         fillVectors(DIMENSIONS, INPUT_SIZE, INPUT_PATH, array_of_vectors);
+        cout << "hello world" << endl;
         // random_selection_vector(array_of_vectors, clusterInfo.number_of_clusters, INPUT_SIZE, randomSelectionForPoints);
         vectors_clusters = k_means_vector(array_of_vectors, clusterInfo.number_of_clusters, INPUT_SIZE);
     }
@@ -96,8 +97,8 @@ int main(int argc, char const *argv[])
     {
         calculateCurveDimensions(INPUT_PATH, curves, INPUT_SIZE);
         fillVectorWithCurves(INPUT_PATH, curves, INPUT_SIZE);
-        curves_clusters = k_means_curve(curves, clusterInfo.number_of_clusters, INPUT_SIZE);
-        random_selection_curves(curves, clusterInfo.number_of_clusters, INPUT_SIZE, randomSelectionForCurves);
+        // curves_clusters = k_means_curve(curves, clusterInfo.number_of_clusters, INPUT_SIZE);
+        // random_selection_curves(curves, clusterInfo.number_of_clusters, INPUT_SIZE, randomSelectionForCurves);
         // lloydAssignmentClusterCurvesFunction(curves, randomSelectionForCurves, lloydAssignmentClusterArray);
     }
 
