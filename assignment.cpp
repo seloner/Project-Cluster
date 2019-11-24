@@ -4,8 +4,9 @@ void lloydAssignmentClusterCurvesUpdate(vector<curve> curves, vector<clusterarra
 {
     double sum = 0, min_distance = 0;
     curve *new_centre;
-    for (unsigned j = 2; j < lloydAssignmentClusterArray.size(); j++)
+    for (unsigned j = 0; j < lloydAssignmentClusterArray.size(); j++)
     {
+        cout << "j   " << j << endl;
         for (unsigned int i = 0; i < lloydAssignmentClusterArray[j].nodes.size(); i++)
         {
             // cout << lloydAssignmentClusterArray[j].nodes[k].machingCurve->id << endl;
