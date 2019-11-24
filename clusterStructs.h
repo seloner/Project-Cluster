@@ -17,21 +17,16 @@ typedef struct Cluster
 {
     int number_of_clusters;
     int number_of_grids;
-	int number_of_vector_hash_tables;
+    int number_of_vector_hash_tables;
     int number_of_vector_hash_functions;
 } cluster;
 
 //about curves
-typedef struct ClusterNodeCurves
+typedef struct Cluster_Curves
 {
-    curve *machingCurve;
-} clusternodecurves;
-
-typedef struct ClusterArrayCurves
-{
-    clusternodecurves centerOfCluster;
-    vector<clusternodecurves> nodes;
-} clusterarraycurves;
+    curve *centerOfCluster;
+    vector<curve *> cluster_curves;
+} cluster_curves;
 
 //about points
 //TODO
