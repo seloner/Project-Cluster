@@ -8,7 +8,7 @@
 #include <bits/stdc++.h>
 #include <stdlib.h>
 #include "curves.h"
-
+#include "vector.h"
 #define CONFLINES 4
 
 using namespace std;
