@@ -98,7 +98,7 @@ int main(int argc, char const *argv[])
         //k_means_curve(curves, clusterInfo.number_of_clusters, INPUT_SIZE);
         random_selection_curves(curves, clusterInfo.number_of_clusters, INPUT_SIZE, randomSelectionForCurves);
         lloydAssignmentClusterCurvesFunction(curves, randomSelectionForCurves, lloydAssignmentClusterArray);
-        lloydAssignmentClusterCurvesUpdate(curves, lloydAssignmentClusterArray);
+        // lloydAssignmentClusterCurvesUpdate(curves, lloydAssignmentClusterArray);
     }
 
     /**

@@ -2,15 +2,35 @@
 
 void lloydAssignmentClusterCurvesUpdate(vector<curve> curves, vector<clusterarraycurves> &lloydAssignmentClusterArray)
 {
-    double min_distance = 0, distance = 0;
-
-    for (unsigned j = 0; j < lloydAssignmentClusterArray.size(); j++)
+    double sum = 0, min_distance = 0;
+    curve *new_centre;
+    for (unsigned j = 2; j < lloydAssignmentClusterArray.size(); j++)
     {
-        cout << j << endl;
-        cout << lloydAssignmentClusterArray[j].centerOfCluster.machingCurve->id << endl;
+        for (unsigned int i = 0; i < lloydAssignmentClusterArray[j].nodes.size(); i++)
+        {
+            // cout << lloydAssignmentClusterArray[j].nodes[k].machingCurve->id << endl;
+            for (unsigned int k = 0; k < lloydAssignmentClusterArray[j].nodes.size(); k++)
+            {
+                sum += dtw(*(lloydAssignmentClusterArray[j].nodes[i].machingCurve), *(lloydAssignmentClusterArray[j].nodes[k].machingCurve));
+            }
+            if (i == 0)
+            {
+                min_distance = sum;
+                new_centre = lloydAssignmentClusterArray[j].nodes[i].machingCurve;
+            }
+            else
+            {
+                if (sum < min_distance)
+                {
+                    min_distance = sum;
+                    new_centre = lloydAssignmentClusterArray[j].nodes[i].machingCurve;
+                }
+            }
+            sum = 0;
+        }
+        lloydAssignmentClusterArray[j].centerOfCluster.machingCurve = new_centre;
     }
 }
-
 void lloydAssignmentClusterCurvesFunction(vector<curve> curves, vector<curve> randomSelectionForCurves, vector<clusterarraycurves> &lloydAssignmentClusterArray)
 {
     int insideElements = 0;
