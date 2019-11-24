@@ -119,3 +119,14 @@ void random_selection_curves(vector<curve> curves, unsigned int k, unsigned int 
         allCenters.push_back(curves[random_number]);
     }
 }
+
+vector<cluster_curves> init_clusters_curves(unsigned int number_of_clusters)
+{
+    vector<cluster_curves> clusters;
+    cluster_curves cluster;
+    for (unsigned int i = 0; i < number_of_clusters; i++)
+    {
+        clusters.push_back(cluster);
+    }
+    return clusters;
+}

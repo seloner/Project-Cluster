@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
     unsigned int DIMENSIONS = 0, INPUT_SIZE = 0, i, curve_file = 0, vector_file = 0;
     char INPUT_PATH[300], CONF_PATH[300], OUTPUT_PATH[300];
     vector_struct *array_of_vectors;
-
+    vector<cluster_curves> curves_clusters;
     //cluster info from conf
     cluster clusterInfo;
 
@@ -95,9 +95,11 @@ int main(int argc, char const *argv[])
     {
         calculateCurveDimensions(INPUT_PATH, curves, INPUT_SIZE);
         fillVectorWithCurves(INPUT_PATH, curves, INPUT_SIZE);
+        curves_clusters = init_clusters_curves(clusterInfo.number_of_clusters);
+        cout << "clusters: " << curves_clusters.size() << endl;
         //k_means_curve(curves, clusterInfo.number_of_clusters, INPUT_SIZE);
-        random_selection_curves(curves, clusterInfo.number_of_clusters, INPUT_SIZE, randomSelectionForCurves);
-        lloydAssignmentClusterCurvesFunction(curves, randomSelectionForCurves, lloydAssignmentClusterArray);
+        // random_selection_curves(curves, clusterInfo.number_of_clusters, INPUT_SIZE, randomSelectionForCurves);
+        // lloydAssignmentClusterCurvesFunction(curves, randomSelectionForCurves, lloydAssignmentClusterArray);
     }
 
     /**

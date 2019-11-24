@@ -8,6 +8,7 @@
 #include "metrics.h"
 #include "dtw.h"
 #include <cmath>
+#include "clusterStructs.h"
 
 using namespace std;
 typedef struct
@@ -26,5 +27,6 @@ vector<vector_struct> k_means_vector(vector_struct *vectors_array, unsigned int 
 vector<curve> k_means_curve(vector<curve> curves_array, unsigned int k, unsigned int size);
 void random_selection_vector(vector_struct *vectors_array, unsigned int k, unsigned int size, vector<vector_struct> &allCenters);
 void random_selection_curves(vector<curve> curves, unsigned int k, unsigned int size, vector<curve> &allCenters);
+vector<cluster_curves> init_clusters_curves(unsigned int number_of_clusters);
 
 #endif
