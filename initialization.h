@@ -25,8 +25,8 @@ typedef struct
 } probability_space_curve;
 vector<cluster_vectors> k_means_vector(vector_struct *vectors_array, unsigned int k, unsigned int size);
 vector<cluster_curves> k_means_curve(vector<curve> curves_array, unsigned int k, unsigned int size);
-void random_selection_vector(vector_struct *vectors_array, unsigned int k, unsigned int size, vector<vector_struct> &allCenters);
-void random_selection_curves(vector<curve> curves, unsigned int k, unsigned int size, vector<curve> &allCenters);
+vector<cluster_vectors> random_selection_vector(vector_struct *vectors_array, unsigned int k, unsigned int size);
+vector<cluster_curves> random_selection_curves(vector<curve> curves_array, unsigned int k, unsigned int size);
 vector<cluster_curves> init_clusters_curves(unsigned int number_of_clusters);
 vector<cluster_vectors> init_clusters_vectors(unsigned int number_of_clusters);
 
