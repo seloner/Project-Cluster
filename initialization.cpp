@@ -49,19 +49,21 @@ vector<cluster_vectors> k_means_vector(vector_struct *vectors_array, unsigned in
     }
     return clusters;
 }
-vector<curve> k_means_curve(vector<curve> curves_array, unsigned int k, unsigned int size)
+vector<cluster_curves> k_means_curve(vector<curve> curves_array, unsigned int k, unsigned int size)
 {
     vector<probability_space_curve> probability_density;
-    vector<curve> centres;
     probability_space_curve prob_space;
     unsigned int random_number, floored_end;
     double distance, sum = 0, probability;
     curve *init_centre;
+    vector<cluster_curves> clusters;
     random_number = rand() % size;
     init_centre = &curves_array[random_number];
-    centres.push_back(*init_centre);
+
+    clusters = init_clusters_curves(k);
+    clusters[0].centerOfCluster = init_centre;
     //loop k -1 times to find the remaining centers
-    for (unsigned j = 0; j < k - 1; j++)
+    for (unsigned j = 1; j < k; j++)
     {
         sum = 0;
         probability_density.clear();
@@ -86,15 +88,15 @@ vector<curve> k_means_curve(vector<curve> curves_array, unsigned int k, unsigned
             //check if probability space is smaller than current space
             if (probability < probability_density[k].end)
             {
-                //new centre found
-                centres.push_back(*init_centre);
+
                 //init the centre so to start again until we have k centres
                 init_centre = probability_density[k].curve_ptr;
+                clusters[j].centerOfCluster = init_centre;
                 break;
             }
         }
     }
-    return centres;
+    return clusters;
 }
 
 void random_selection_vector(vector_struct *vectors_array, unsigned int k, unsigned int size, vector<vector_struct> &allCenters)
