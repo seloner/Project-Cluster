@@ -1,19 +1,20 @@
 #include "initialization.h"
 #include <random>
 #include "dtw.h"
-vector<vector_struct> k_means_vector(vector_struct *vectors_array, unsigned int k, unsigned int size)
+vector<cluster_vectors> k_means_vector(vector_struct *vectors_array, unsigned int k, unsigned int size)
 {
     vector<probability_space_vector> probability_density;
-    vector<vector_struct> centres;
+    vector<cluster_vectors> clusters;
     probability_space_vector prob_space;
     unsigned int random_number, floored_end;
     double distance, sum = 0, probability;
     vector_struct *init_centre;
     random_number = rand() % size;
     init_centre = &vectors_array[random_number];
-    centres.push_back(*init_centre);
+    clusters = init_clusters_vectors(k);
+    clusters[0].centerOfCluster = init_centre;
     //loop k -1 times to find the remaining centers
-    for (unsigned j = 0; j < k - 1; j++)
+    for (unsigned j = 1; j < k; j++)
     {
         sum = 0;
         probability_density.clear();
@@ -39,14 +40,14 @@ vector<vector_struct> k_means_vector(vector_struct *vectors_array, unsigned int 
             if (probability < probability_density[k].end)
             {
                 //new centre found
-                centres.push_back(*init_centre);
                 //init the centre so to start again until we have k centres
                 init_centre = probability_density[k].vector_struct_ptr;
+                clusters[j].centerOfCluster = init_centre;
                 break;
             }
         }
     }
-    return centres;
+    return clusters;
 }
 vector<curve> k_means_curve(vector<curve> curves_array, unsigned int k, unsigned int size)
 {

@@ -16,6 +16,7 @@ int main(int argc, char const *argv[])
     char INPUT_PATH[300], CONF_PATH[300], OUTPUT_PATH[300];
     vector_struct *array_of_vectors;
     vector<cluster_curves> curves_clusters;
+    vector<cluster_vectors> vectors_clusters;
     //cluster info from conf
     cluster clusterInfo;
 
@@ -88,15 +89,20 @@ int main(int argc, char const *argv[])
         DIMENSIONS = calculateDimension(INPUT_PATH);
         array_of_vectors = new vector_struct[INPUT_SIZE];
         fillVectors(DIMENSIONS, INPUT_SIZE, INPUT_PATH, array_of_vectors);
-        random_selection_vector(array_of_vectors, clusterInfo.number_of_clusters, INPUT_SIZE, randomSelectionForPoints);
-        //k_means_vector(array_of_vectors, clusterInfo.number_of_clusters, INPUT_SIZE);
+        // random_selection_vector(array_of_vectors, clusterInfo.number_of_clusters, INPUT_SIZE, randomSelectionForPoints);
+        vectors_clusters = k_means_vector(array_of_vectors, clusterInfo.number_of_clusters, INPUT_SIZE);
+        for (unsigned int l = 0; l < vectors_clusters.size(); l++)
+        {
+            cout << "centre: " << vectors_clusters[l].centerOfCluster->id << endl;
+            ;
+        }
     }
     else // case type is curve
     {
         calculateCurveDimensions(INPUT_PATH, curves, INPUT_SIZE);
         fillVectorWithCurves(INPUT_PATH, curves, INPUT_SIZE);
         curves_clusters = init_clusters_curves(clusterInfo.number_of_clusters);
-        cout << "clusters: " << curves_clusters.size() << endl;
+        cout << "clusters:" << curves_clusters.size() << endl;
         //k_means_curve(curves, clusterInfo.number_of_clusters, INPUT_SIZE);
         // random_selection_curves(curves, clusterInfo.number_of_clusters, INPUT_SIZE, randomSelectionForCurves);
         // lloydAssignmentClusterCurvesFunction(curves, randomSelectionForCurves, lloydAssignmentClusterArray);
