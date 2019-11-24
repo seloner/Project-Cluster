@@ -1,3 +1,5 @@
 *.o
 cluster
 settings.json
+.vscode/launch.json
+.gitignore

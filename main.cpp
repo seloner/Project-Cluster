@@ -24,43 +24,45 @@ int main(int argc, char const *argv[])
     vector<curve> curves;
 
     //clusters from random selection
-    vector<vector_struct> randomSelectionForPoints;
-    vector<curve> randomSelectionForCurves;
+    //vector<vector_struct> randomSelectionForPoints;
+    //vector<curve> randomSelectionForCurves;
 
     // read args
-    for (i = 1; i < argc; i++)
-    {
-        if (strcmp(argv[i], "-i") == 0)
-        {
-            strcpy(INPUT_PATH, argv[i + 1]);
-        }
-        if (strcmp(argv[i], "-c") == 0)
-        {
-            if (argc - 1 < i + 1)
-            {
+    // for (i = 1; i < argc; i++)
+    // {
+    //     if (strcmp(argv[i], "-i") == 0)
+    //     {
+    //         strcpy(INPUT_PATH, argv[i + 1]);
+    //     }
+    //     if (strcmp(argv[i], "-c") == 0)
+    //     {
+    //         if (argc - 1 < i + 1)
+    //         {
 
-                cout << "No -c given" << endl;
-            }
-            else
-            {
-                strcpy(CONF_PATH, argv[i + 1]);
-            }
-        }
-        if (strcmp(argv[i], "-o") == 0)
-        {
-            if (argc - 1 < i + 1)
-            {
+    //             cout << "No -c given" << endl;
+    //         }
+    //         else
+    //         {
+    //             strcpy(CONF_PATH, argv[i + 1]);
+    //         }
+    //     }
+    //     if (strcmp(argv[i], "-o") == 0)
+    //     {
+    //         if (argc - 1 < i + 1)
+    //         {
 
-                cout << "No -o given" << endl;
-            }
-            else
-            {
-                strcpy(OUTPUT_PATH, argv[i + 1]);
-            }
-        }
-
-        //TODO (optional) take "-complete" as if argument and do stuff
-    }
+    //             cout << "No -o given" << endl;
+    //         }
+    //         else
+    //         {
+    //             strcpy(OUTPUT_PATH, argv[i + 1]);
+    //         }
+    //     }
+    strcpy(INPUT_PATH, "data/trajectories_dataset_small.csv");
+    strcpy(CONF_PATH, "data/cluster.conf");
+    strcpy(OUTPUT_PATH, "-oo");
+    //TODO (optional) take "-complete" as if argument and do stuff
+    //}
 
     // init rand
     srand(time(NULL));
@@ -79,9 +81,6 @@ int main(int argc, char const *argv[])
     //check conf file about clusters
     readClusterConf(CONF_PATH, clusterInfo);
 
-    //clusters from random selection
-    vector<Cluster_Curves> lloydAssignmentClusterArray;
-
     cout << "Input size: " << INPUT_SIZE << endl;
 
     if (vector_file) // case type is vector
@@ -97,11 +96,16 @@ int main(int argc, char const *argv[])
     {
         calculateCurveDimensions(INPUT_PATH, curves, INPUT_SIZE);
         fillVectorWithCurves(INPUT_PATH, curves, INPUT_SIZE);
+
         // curves_clusters = k_means_curve(curves, clusterInfo.number_of_clusters, INPUT_SIZE);
         // random_selection_curves(curves, clusterInfo.number_of_clusters, INPUT_SIZE, randomSelectionForCurves);
         // lloydAssignmentClusterCurvesFunction(curves, randomSelectionForCurves, lloydAssignmentClusterArray);
-    }
 
+        //curves_clusters = k_means_curve(curves, clusterInfo.number_of_clusters, INPUT_SIZE);
+        curves_clusters = random_selection_curves(curves, clusterInfo.number_of_clusters, INPUT_SIZE);
+
+        lloydAssignmentClusterCurvesFunction(curves, curves_clusters);
+    }
     /**
      *
      * FREE MEMORY

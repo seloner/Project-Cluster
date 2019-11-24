@@ -99,28 +99,39 @@ vector<cluster_curves> k_means_curve(vector<curve> curves_array, unsigned int k,
     return clusters;
 }
 
-void random_selection_vector(vector_struct *vectors_array, unsigned int k, unsigned int size, vector<vector_struct> &allCenters)
+vector<cluster_vectors> random_selection_vector(vector_struct *vectors_array, unsigned int k, unsigned int size)
 {
     int random_number = 0;
+    vector<cluster_vectors> clusters;
+    vector_struct *init_centre;
+    
+    clusters = init_clusters_vectors(k);
 
     for (int i = 0; i < k; i++)
     {
         random_number = rand() % size;
         cout << "Random Selection of Vector: " << vectors_array[random_number].id << endl;
-        allCenters.push_back(vectors_array[random_number]);
+        init_centre = &vectors_array[random_number];
+        clusters[i].centerOfCluster = init_centre;
     }
+    return clusters;
 }
 
-void random_selection_curves(vector<curve> curves, unsigned int k, unsigned int size, vector<curve> &allCenters)
+vector<cluster_curves> random_selection_curves(vector<curve> curves_array, unsigned int k, unsigned int size)
 {
     int random_number = 0;
+    curve *init_centre;
+    vector<cluster_curves> clusters;    
+    clusters = init_clusters_curves(k);
 
     for (int i = 0; i < k; i++)
     {
         random_number = rand() % size;
-        cout << "Random Selection of Curve: " << curves[random_number].id << endl;
-        allCenters.push_back(curves[random_number]);
+        cout << "Random Selection of Vector: " << curves_array[random_number].id << endl;
+        init_centre = &curves_array[random_number];
+        clusters[i].centerOfCluster = init_centre;
     }
+    return clusters;
 }
 
 vector<cluster_curves> init_clusters_curves(unsigned int number_of_clusters)
