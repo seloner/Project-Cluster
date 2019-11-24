@@ -130,3 +130,14 @@ vector<cluster_curves> init_clusters_curves(unsigned int number_of_clusters)
     }
     return clusters;
 }
+
+vector<cluster_vectors> init_clusters_vectors(unsigned int number_of_clusters)
+{
+    vector<cluster_vectors> clusters;
+    cluster_vectors cluster;
+    for (unsigned int i = 0; i < number_of_clusters; i++)
+    {
+        clusters.push_back(cluster);
+    }
+    return clusters;
+}

@@ -28,11 +28,11 @@ typedef struct Cluster_Curves
     vector<curve *> cluster_curves;
 } cluster_curves;
 
-typedef struct Vector_Curves
+typedef struct Cluster_Vectors
 {
     vector_struct *centerOfCluster;
     vector<vector_struct *> cluster_vectors;
-} vector_curves;
+} cluster_vectors;
 
 //about points
 //TODO

@@ -27,4 +27,8 @@ typedef struct Curve
 string convertToString(char *array, int size);
 void printCurves(vector<curve> curves, int number_of_lines);
 void bruteForceCurves(int d, int size, char *input_file_path, char *query_file_path, char *output_file_path, vector<point> **array);
+void calculateCurveDimensions(char *path, vector<curve> &curves, int number_of_lines);
+void printCurves(vector<curve> curves, int number_of_lines);
+void fillVectorWithCurves(char *path, vector<curve> &curves, int number_of_lines);
+
 #endif
