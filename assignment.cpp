@@ -2,52 +2,41 @@
 
 void lloydAssignmentClusterCurvesFunction(vector<curve> curves, vector<cluster_curves> &curves_clusters)
 {
-    //int insideElements = 0;
-    //curve *clusterarraycurve;
+        cout<<"[check 2] curves_clusters[0].centerOfCluster->id<: "<<curves_clusters[0].centerOfCluster->id<<endl;
     //ta prwta kentra do8ikan ston lloyd
-    int distance;
+    double distance;
     int min_distance;
-    int candidateCluster = 0;
+    unsigned int candidateCluster = 0;
     curve *nodeCurveToPass;
+    nodeCurveToPass = NULL;
     //pame na ftiaxoume ta kentra
-    for (int kampilesLoop = 0; kampilesLoop < curves.size(); kampilesLoop++)
+    for (unsigned int kampilesLoop = 0; kampilesLoop < curves.size(); kampilesLoop++)
     {
-        //cout << "VIMA 1"<<endl;
-        for (int kentraLoop = 0; kentraLoop < curves_clusters.size(); kentraLoop++)
+        for (unsigned int kentraLoop = 0; kentraLoop < curves_clusters.size(); kentraLoop++)
         {
-        //cout << "VIMA 2"<<endl;
-
             distance = dtw(*(curves_clusters[kentraLoop].centerOfCluster), curves[kampilesLoop]);
-        //cout << "VIMA 2a"<<endl;
             if (kentraLoop == 0)
             {
-        //cout << "VIMA 3"<<endl;
                 //exoume: mikroteri apostasi, to ipopsifio cluster pou 8a proste8ei, kai h kampili pou 8a proste8ei me deikth ston teliko cluster
                 min_distance = distance;
                 candidateCluster = kentraLoop;
-                nodeCurveToPass = &curves[kampilesLoop];
             }
             else
             {
-        //cout << "VIMA 4"<<endl;
                 //if we have a new min update
                 if (distance < min_distance)
                 {
-        //cout << "VIMA 5"<<endl;
                     min_distance = distance;
                     candidateCluster = kentraLoop;
-                    nodeCurveToPass = &curves[kampilesLoop];
                 }
             }
-        //cout << "VIMA 6"<<endl;
         }
-        //cout << "VIMA 7"<<endl;
+        nodeCurveToPass = &curves[kampilesLoop];
+
         //TODO (maybe not ?) allagi tou intoCLuster
         curves_clusters[candidateCluster].cluster_curves.push_back(nodeCurveToPass);
-                //cout << "VIMA 8"<<endl;
-
     }
-
+        cout<<"[check 3] curves_clusters[0].centerOfCluster->id<: "<<curves_clusters[0].centerOfCluster->id<<endl;
             //test results
             // cout << endl<< "############### from function ##############" << endl;
             // cout << endl<< "Clusters from phase 1:" << endl;

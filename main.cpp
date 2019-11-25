@@ -97,37 +97,38 @@ int main(int argc, char const *argv[])
         fillVectorWithCurves(INPUT_PATH, curves, INPUT_SIZE);
         //curves_clusters = k_means_curve(curves, clusterInfo.number_of_clusters, INPUT_SIZE);
         curves_clusters = random_selection_curves(curves, clusterInfo.number_of_clusters, INPUT_SIZE);
-
+        cout<<"[check 1] curves_clusters[0].centerOfCluster->id<: "<<curves_clusters[0].centerOfCluster->id<<endl;
         lloydAssignmentClusterCurvesFunction(curves, curves_clusters);
-            //cout << "DEBUG 4" << endl;
+        cout<<"[check 4] curves_clusters[0].centerOfCluster->id<: "<<curves_clusters[0].centerOfCluster->id<<endl;
 
             //test results
-            // cout << endl<< "############### from main ##############" << endl;
-            // cout << "Clusters from phase 1:" << endl;
-            // for (int kentraLoop = 0; kentraLoop < curves_clusters.size(); kentraLoop++)
-            // {
-            //     cout << "Cluster: " << kentraLoop << endl;
-            //     cout << "Center (curve id): " << curves_clusters[kentraLoop].centerOfCluster->id << endl;
-            //     cout << "Curves Inside (ids)>>" << endl;
-            //     for (int kampilesLoop = 0; kampilesLoop < curves_clusters[kentraLoop].cluster_curves.size(); kampilesLoop++)
-            //     {
-            //         if(curves_clusters[kentraLoop].cluster_curves[kampilesLoop]->id<0 || curves_clusters[kentraLoop].cluster_curves[kampilesLoop]->id>500)
-            //         {
-            //             cout<<endl;
-            //             cout << '\a';
-            //             cout <<"#################"<<endl<< "REPORT"<<endl<<"#################"<<endl;
-            //             cout<<"Problem appeared in: "<<endl;
-            //             cout<< "Cluster: "<<kentraLoop<<endl;
-            //             cout<< "Cluster Address: "<< &curves_clusters[kentraLoop] <<endl;
-            //             cout<< "cluster_curves Address: "<< &curves_clusters[kentraLoop].cluster_curves <<endl;
-            //             cout<< "Curve Address: "<< curves_clusters[kentraLoop].cluster_curves[kampilesLoop] <<endl;
-            //             cout << "Curve id: " << curves_clusters[kentraLoop].cluster_curves[kampilesLoop]->id << endl;
-            //             cout << "Curve dimensions: " << curves_clusters[kentraLoop].cluster_curves[kampilesLoop]->dimensions << endl;
-            //         }
-            //         cout << curves_clusters[kentraLoop].cluster_curves[kampilesLoop]->id << ", ";
-            //     }
-            //     cout << endl;
-            // }
+            cout << endl<< "############### from main ##############" << endl;
+            cout << "Clusters from phase 1:" << endl;
+            for (int kentraLoop = 0; kentraLoop < curves_clusters.size(); kentraLoop++)
+            {
+                cout << "Cluster: " << kentraLoop << endl;
+                cout << "Center (curve id): " << curves_clusters[kentraLoop].centerOfCluster->id << endl;
+                cout << "Curves Inside (ids)>>" << endl;
+                for (int kampilesLoop = 0; kampilesLoop < curves_clusters[kentraLoop].cluster_curves.size(); kampilesLoop++)
+                {
+                    if(curves_clusters[kentraLoop].cluster_curves[kampilesLoop]->id<0 || curves_clusters[kentraLoop].cluster_curves[kampilesLoop]->id>500)
+                    {
+                        cout <<"################# REPORT #################"<<endl;
+                        cout<<"Problem on: "<<endl;
+                        cout << "curves_clusters["<<kentraLoop<<"].cluster_curves["<<kampilesLoop<<"]"<<endl;
+                        cout<< "Cluster: "<<kentraLoop<<endl;
+                        cout << "Curve Node: " << kampilesLoop << endl;
+                        cout<< "Cluster Address: "<< &curves_clusters[kentraLoop] <<endl;
+                        cout<< "cluster_curves Address: "<< &curves_clusters[kentraLoop].cluster_curves <<endl;
+                        cout<< "Curve Address: "<< curves_clusters[kentraLoop].cluster_curves[kampilesLoop] <<endl;
+                        cout << "Curve id: " << curves_clusters[kentraLoop].cluster_curves[kampilesLoop]->id << endl;
+                        cout << "Curve dimensions: " << curves_clusters[kentraLoop].cluster_curves[kampilesLoop]->dimensions << endl;
+                        cout <<"###########################################"<<endl;
+                    }
+                    cout << curves_clusters[kentraLoop].cluster_curves[kampilesLoop]->id << ", ";
+                }
+                cout << endl;
+            }
     }
 
     /**
