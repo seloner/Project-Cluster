@@ -6,11 +6,11 @@
 #include "curves.h"
 #include <math.h>
 #include "dtw.h"
+#include "metrics.h"
 
 using namespace std;
 
-void lloydAssignmentClusterCurvesFunction(vector<curve> curves, vector<cluster_curves> curves_clusters);
-void lloydAssignmentClusterPointsFunction();
-void lloydAssignmentClusterCurves(vector<cluster_curves> *clusters, vector<curve> *curves);
+void lloydAssignmentClusterCurves(vector<curve> curves, vector<cluster_curves> curves_clusters);
+void lloydAssignmentClusterVectors(vector_struct *vectors_array, vector<cluster_vectors> *clusters, unsigned int size);
 
 #endif

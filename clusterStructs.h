@@ -25,9 +25,8 @@ typedef struct Cluster
 typedef struct Cluster_Curves
 {
     curve *centerOfCluster;
-    vector<curve *> cluster_curves;
+    // vector<curve *> cluster_curves;
 } cluster_curves;
-
 
 //about points
 typedef struct Cluster_Vectors
