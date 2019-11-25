@@ -9,7 +9,8 @@
 
 using namespace std;
 
-void lloydAssignmentClusterCurvesFunction(vector<curve> curves, vector<cluster_curves> *curves_clusters);
+void lloydAssignmentClusterCurvesFunction(vector<curve> curves, vector<cluster_curves> curves_clusters);
 void lloydAssignmentClusterPointsFunction();
+void lloydAssignmentClusterCurves(vector<cluster_curves> *clusters, vector<curve> *curves);
 
 #endif
