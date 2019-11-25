@@ -1,5 +1,5 @@
-#ifndef CLUSTERSTRUCTS_H_
-#define CLUSTERSTRUCTS_H_
+#ifndef clusterStructs_H_
+#define clusterStructs_H_
 
 #include <iostream>
 #include <fstream>
@@ -27,7 +27,6 @@ typedef struct Cluster_Curves
     curve *centerOfCluster;
     vector<curve *> cluster_curves;
 } cluster_curves;
-
 
 //about points
 typedef struct Cluster_Vectors

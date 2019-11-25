@@ -1,7 +1,6 @@
-#include <string>
-OBJS 	= main.o readFunctions.o vector.o printFunctions.o  initialization.o metrics.o assignment.o curves.o dtw.o update.o
-SOURCE	= main.cpp readFunctions.cpp vector.cpp printFunctions.cpp initialization.cpp metrics.cpp assignment.cpp curves.cpp dtw.cpp update.cpp
-HEADER  = readFunctions.h vector.h printFunctions.h initialization.h clusterStructs.h metrics.h assignment.h curves.h dtw.h update.h
+OBJS 	= main.o readFunctions.o vector.o printFunctions.o  initialization.o metrics.o assignment.o curves.o dtw.o update.o combinations.o
+SOURCE	= main.cpp readFunctions.cpp vector.cpp printFunctions.cpp initialization.cpp metrics.cpp assignment.cpp curves.cpp dtw.cpp update.cpp combinations.cpp
+HEADER  = readFunctions.h vector.h printFunctions.h initialization.h clusterStructs.h metrics.h assignment.h curves.h dtw.h update.h combinations.h
 OUT  	= cluster
 FLAGS   = -g -c
 CC	= g++
@@ -33,7 +32,8 @@ metrics.o: metrics.cpp
 	$(CC)  $(FLAGS) metrics.cpp
 dtw.o: dtw.cpp
 	$(CC)  $(FLAGS) dtw.cpp
-
+combinations.o: combinations.cpp
+	$(CC)  $(FLAGS) combinations.cpp
 clean:
 	rm -f $(OBJS) $(OUT)
 

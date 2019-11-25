@@ -63,7 +63,7 @@ vector<cluster_curves> k_means_curve(vector<curve> curves_array, unsigned int k,
     clusters = init_clusters_curves(k);
     clusters[0].centerOfCluster = init_centre;
     //loop k -1 times to find the remaining centers
-    for (unsigned j = 1; j < k; j++)
+    for (unsigned int j = 1; j < k; j++)
     {
         sum = 0;
         probability_density.clear();
@@ -80,7 +80,7 @@ vector<cluster_curves> k_means_curve(vector<curve> curves_array, unsigned int k,
                 prob_space.end = sum;
                 probability_density.push_back(prob_space);
             }
-        };
+        }
         probability = static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / sum));
         //loop through every probability space
         for (unsigned k = 0; k < probability_density.size(); k++)
@@ -124,7 +124,7 @@ vector<cluster_curves> random_selection_curves(vector<curve> curves_array, unsig
     vector<cluster_curves> clusters;    
     clusters = init_clusters_curves(k);
 
-    for (int i = 0; i < k; i++)
+    for (unsigned int i = 0; i < k; i++)
     {
         random_number = rand() % size;
         cout << "Random Selection of Vector: " << curves_array[random_number].id << endl;
