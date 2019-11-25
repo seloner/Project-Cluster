@@ -2,12 +2,16 @@
 vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size, curve *temp)
 {
     vector<cluster_curves> clusters;
-    clusters = random_selection_curves(curves, clusterInfo.number_of_clusters, size);
-    test(curves);
-    for (unsigned int i = 0; i < clusters.size(); i++)
-    {
-        cout << "cluster: " << i << "    " << clusters[i].centerOfCluster->vectorPoins.size() << endl;
-    }
+    clusters = random_selection_curves(&curves, clusterInfo.number_of_clusters, size);
+    lloydAssignmentClusterCurves(&curves, &clusters);
+    // for (unsigned int i = 0; i < clusters[0].cluster_curves.size(); i++)
+    // {
+    //     cout << " id   " << clusters[0].cluster_curves[i]->id << endl;
+    // }
+    // for (unsigned int i = 0; i < clusters[1].cluster_curves.size(); i++)
+    // {
+    //     cout << " id   " << clusters[1].cluster_curves[i]->id << endl;
+    // }
 
     return clusters;
 }

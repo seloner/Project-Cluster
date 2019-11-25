@@ -104,7 +104,7 @@ vector<cluster_vectors> random_selection_vector(vector_struct *vectors_array, un
     int random_number = 0;
     vector<cluster_vectors> clusters;
     vector_struct *init_centre;
-    
+
     clusters = init_clusters_vectors(k);
 
     for (int i = 0; i < k; i++)
@@ -117,18 +117,18 @@ vector<cluster_vectors> random_selection_vector(vector_struct *vectors_array, un
     return clusters;
 }
 
-vector<cluster_curves> random_selection_curves(vector<curve> curves_array, unsigned int k, unsigned int size)
+vector<cluster_curves> random_selection_curves(vector<curve> *curves_array, unsigned int k, unsigned int size)
 {
     int random_number = 0;
     curve *init_centre;
-    vector<cluster_curves> clusters;    
+    vector<cluster_curves> clusters;
     clusters = init_clusters_curves(k);
 
     for (unsigned int i = 0; i < k; i++)
     {
         random_number = rand() % size;
-        cout << "Random Selection of Vector: " << curves_array[random_number].id << endl;
-        init_centre = &curves_array[random_number];
+        cout << "Random Selection of Vector: " << curves_array->at(random_number).id << endl;
+        init_centre = &(curves_array->at(random_number));
         clusters[i].centerOfCluster = init_centre;
     }
     return clusters;

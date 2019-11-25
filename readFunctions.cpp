@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include "readFunctions.h"
 #include "clusterStructs.h"
+#include <algorithm>
 
 int type_of_file(char *path)
 {
@@ -10,6 +11,10 @@ int type_of_file(char *path)
     string line;
     //get every line from the input
     getline(file, line);
+    if (!line.empty() && line[line.length() - 1] == '\r')
+    {
+        line.erase(line.length() - 1);
+    }
     if (line.compare("vectors") == 0)
     {
         return 0;
