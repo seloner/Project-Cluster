@@ -28,41 +28,42 @@ int main(int argc, char const *argv[])
     //vector<curve> randomSelectionForCurves;
 
     // read args
-    // for (i = 1; i < argc; i++)
-    // {
-    //     if (strcmp(argv[i], "-i") == 0)
-    //     {
-    //         strcpy(INPUT_PATH, argv[i + 1]);
-    //     }
-    //     if (strcmp(argv[i], "-c") == 0)
-    //     {
-    //         if (argc - 1 < i + 1)
-    //         {
+    for (i = 1; i < argc; i++)
+    {
+        if (strcmp(argv[i], "-i") == 0)
+        {
+            strcpy(INPUT_PATH, argv[i + 1]);
+        }
+        if (strcmp(argv[i], "-c") == 0)
+        {
+            if (argc - 1 < i + 1)
+            {
 
-    //             cout << "No -c given" << endl;
-    //         }
-    //         else
-    //         {
-    //             strcpy(CONF_PATH, argv[i + 1]);
-    //         }
-    //     }
-    //     if (strcmp(argv[i], "-o") == 0)
-    //     {
-    //         if (argc - 1 < i + 1)
-    //         {
+                cout << "No -c given" << endl;
+            }
+            else
+            {
+                strcpy(CONF_PATH, argv[i + 1]);
+            }
+        }
+        if (strcmp(argv[i], "-o") == 0)
+        {
+            if (argc - 1 < i + 1)
+            {
 
-    //             cout << "No -o given" << endl;
-    //         }
-    //         else
-    //         {
-    //             strcpy(OUTPUT_PATH, argv[i + 1]);
-    //         }
-    //     }
-                strcpy(INPUT_PATH, "data/trajectories_dataset_small.csv");
-                strcpy(CONF_PATH, "data/cluster.conf");
-                strcpy(OUTPUT_PATH, "-oo");
-        //TODO (optional) take "-complete" as if argument and do stuff
-    //}
+                cout << "No -o given" << endl;
+            }
+            else
+            {
+                strcpy(OUTPUT_PATH, argv[i + 1]);
+            }
+        }
+    }
+    //             strcpy(INPUT_PATH, "data/trajectories_dataset_small.csv");
+    //             strcpy(CONF_PATH, "data/cluster.conf");
+    //             strcpy(OUTPUT_PATH, "-oo");
+    //     //TODO (optional) take "-complete" as if argument and do stuff
+    // //}
 
     // init rand
     srand(time(NULL));
@@ -95,40 +96,21 @@ int main(int argc, char const *argv[])
     {
         calculateCurveDimensions(INPUT_PATH, curves, INPUT_SIZE);
         fillVectorWithCurves(INPUT_PATH, curves, INPUT_SIZE);
+        // for (unsigned int l = 0; l < INPUT_SIZE; l++)
+        // {
+        //     cout << "Id: " << curves[l].id << "     dimension: " << curves[l].dimensions << "   vector size: " << curves[l].vectorPoins.size() << endl;
+        // }
         //curves_clusters = k_means_curve(curves, clusterInfo.number_of_clusters, INPUT_SIZE);
         curves_clusters = random_selection_curves(curves, clusterInfo.number_of_clusters, INPUT_SIZE);
-        cout<<"[check 1] curves_clusters[0].centerOfCluster->id<: "<<curves_clusters[0].centerOfCluster->id<<endl;
-        lloydAssignmentClusterCurvesFunction(curves, curves_clusters);
-        cout<<"[check 4] curves_clusters[0].centerOfCluster->id<: "<<curves_clusters[0].centerOfCluster->id<<endl;
-
-            //test results
-            cout << endl<< "############### from main ##############" << endl;
-            cout << "Clusters from phase 1:" << endl;
-            for (int kentraLoop = 0; kentraLoop < curves_clusters.size(); kentraLoop++)
-            {
-                cout << "Cluster: " << kentraLoop << endl;
-                cout << "Center (curve id): " << curves_clusters[kentraLoop].centerOfCluster->id << endl;
-                cout << "Curves Inside (ids)>>" << endl;
-                for (int kampilesLoop = 0; kampilesLoop < curves_clusters[kentraLoop].cluster_curves.size(); kampilesLoop++)
-                {
-                    if(curves_clusters[kentraLoop].cluster_curves[kampilesLoop]->id<0 || curves_clusters[kentraLoop].cluster_curves[kampilesLoop]->id>500)
-                    {
-                        cout <<"################# REPORT #################"<<endl;
-                        cout<<"Problem on: "<<endl;
-                        cout << "curves_clusters["<<kentraLoop<<"].cluster_curves["<<kampilesLoop<<"]"<<endl;
-                        cout<< "Cluster: "<<kentraLoop<<endl;
-                        cout << "Curve Node: " << kampilesLoop << endl;
-                        cout<< "Cluster Address: "<< &curves_clusters[kentraLoop] <<endl;
-                        cout<< "cluster_curves Address: "<< &curves_clusters[kentraLoop].cluster_curves <<endl;
-                        cout<< "Curve Address: "<< curves_clusters[kentraLoop].cluster_curves[kampilesLoop] <<endl;
-                        cout << "Curve id: " << curves_clusters[kentraLoop].cluster_curves[kampilesLoop]->id << endl;
-                        cout << "Curve dimensions: " << curves_clusters[kentraLoop].cluster_curves[kampilesLoop]->dimensions << endl;
-                        cout <<"###########################################"<<endl;
-                    }
-                    cout << curves_clusters[kentraLoop].cluster_curves[kampilesLoop]->id << ", ";
-                }
-                cout << endl;
-            }
+        for (unsigned int l = 0; l < curves_clusters.size(); l++)
+        {
+            cout << "cluster: " << l << "    " << curves_clusters[l].centerOfCluster->id << endl;
+        }
+        lloydAssignmentClusterCurvesFunction(curves, &curves_clusters);
+        for (unsigned int i = 0; i < curves_clusters.size(); i++)
+        {
+            cout << curves_clusters[i].cluster_curves.size() << endl;
+        }
     }
 
     /**
