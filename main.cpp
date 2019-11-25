@@ -82,12 +82,16 @@ int main(int argc, char const *argv[])
     }
     else // case type is curve
     {
-
+        curve *array_of_curves = new curve[INPUT_SIZE];
+        for (unsigned int i = 0; i < curves.size(); i++)
+        {
+            array_of_curves[i] = curves[i];
+        }
         calculateCurveDimensions(INPUT_PATH, curves, INPUT_SIZE);
         fillVectorWithCurves(INPUT_PATH, curves, INPUT_SIZE);
 
         // random-lloyd-pam
-        curves_clusters = random_lloyd_pam_curve(curves, clusterInfo, INPUT_SIZE);
+        curves_clusters = random_lloyd_pam_curve(curves, clusterInfo, INPUT_SIZE, array_of_curves);
 
         //kmeeans-lloyd-pam
         // curves_clusters = random_selection_curves(curves, clusterInfo.number_of_clusters, INPUT_SIZE);

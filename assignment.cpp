@@ -1,15 +1,15 @@
 #include "assignment.h"
 
-void lloydAssignmentClusterCurves(vector<cluster_curves> *clusters, vector<curve> *curves)
+void lloydAssignmentClusterCurves(unsigned int size, vector<cluster_curves> &curves_clusters)
 {
     double distance;
     int min_index, min_distance;
     {
-        for (unsigned int i = 0; i < curves->size(); i++)
-        {
-            dtw(curves->at(clusters->at(0).centerOfCluster->id), curves->at(clusters->at(0).centerOfCluster->id));
-            cout << "cluster centre " << clusters->at(0).centerOfCluster->id << endl;
-        }
+        // for (unsigned int i = 0; i < size; i++)
+        // {
+        //     dtw(curves[i], curves[i]);
+        // }
+
         // {
         //     for (unsigned int k = 0; k < 1; k++)
         //     {
@@ -65,4 +65,8 @@ void lloydAssignmentClusterVectors(vector_struct *vectors_array, vector<cluster_
         }
         clusters->at(min_index).cluster_vectors.push_back(&(vectors_array[i]));
     }
+}
+
+void test(vector<curve> curves)
+{
 }

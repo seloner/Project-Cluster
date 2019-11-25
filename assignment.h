@@ -10,7 +10,7 @@
 
 using namespace std;
 
-void lloydAssignmentClusterCurves(vector<curve> curves, vector<cluster_curves> curves_clusters);
+void lloydAssignmentClusterCurves(unsigned int size, vector<cluster_curves> &curves_clusters);
 void lloydAssignmentClusterVectors(vector_struct *vectors_array, vector<cluster_vectors> *clusters, unsigned int size);
-
+void test(vector<curve> curves);
 #endif

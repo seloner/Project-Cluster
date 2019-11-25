@@ -1,13 +1,12 @@
 #include "combinations.h"
-vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size)
+vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size, curve *temp)
 {
     vector<cluster_curves> clusters;
-
     clusters = random_selection_curves(curves, clusterInfo.number_of_clusters, size);
-    // lloydAssignmentClusterCurves(&clusters, &curves);
-    for (unsigned int l = 0; l < clusters.size(); l++)
+    test(curves);
+    for (unsigned int i = 0; i < clusters.size(); i++)
     {
-        cout << "cluster: " << l << "    " << clusters[l].centerOfCluster->id << endl;
+        cout << "cluster: " << i << "    " << clusters[i].centerOfCluster->vectorPoins.size() << endl;
     }
 
     return clusters;
