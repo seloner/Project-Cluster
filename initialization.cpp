@@ -49,7 +49,7 @@ vector<cluster_vectors> k_means_vector(vector_struct *vectors_array, unsigned in
     }
     return clusters;
 }
-vector<cluster_curves> k_means_curve(vector<curve> curves_array, unsigned int k, unsigned int size)
+vector<cluster_curves> k_means_curve(vector<curve> *curves_array, unsigned int k, unsigned int size)
 {
     vector<probability_space_curve> probability_density;
     probability_space_curve prob_space;
@@ -58,7 +58,7 @@ vector<cluster_curves> k_means_curve(vector<curve> curves_array, unsigned int k,
     curve *init_centre;
     vector<cluster_curves> clusters;
     random_number = rand() % size;
-    init_centre = &curves_array[random_number];
+    init_centre = &(curves_array->at(random_number));
 
     clusters = init_clusters_curves(k);
     clusters[0].centerOfCluster = init_centre;
@@ -71,11 +71,11 @@ vector<cluster_curves> k_means_curve(vector<curve> curves_array, unsigned int k,
         for (unsigned int i = 0; i < size; i++)
         {
             //if curve is alrady selected as center skip
-            if (init_centre->id != curves_array[i].id)
+            if (init_centre->id != curves_array->at(i).id)
             {
                 prob_space.start = sum;
-                prob_space.curve_ptr = &curves_array[i];
-                distance = dtw(*init_centre, curves_array[i]);
+                prob_space.curve_ptr = &(curves_array->at(i));
+                distance = dtw(*init_centre, curves_array->at(i));
                 sum += pow(distance, 2);
                 prob_space.end = sum;
                 probability_density.push_back(prob_space);

@@ -4,6 +4,15 @@ vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clus
     vector<cluster_curves> clusters;
     clusters = random_selection_curves(&curves, clusterInfo.number_of_clusters, size);
     lloydAssignmentClusterCurves(&curves, &clusters);
+    for(int i=0; i<clusters.size(); i++)
+    {
+        cout <<endl<< "Cluster: "<<i << " >>"<<endl;
+        for(int j=0; j<clusters[i].cluster_curves.size(); j++)
+        {
+            cout << clusters[i].cluster_curves[j]->id <<", ";
+        }
+        cout << endl;
+    }
     // for (unsigned int i = 0; i < clusters[0].cluster_curves.size(); i++)
     // {
     //     cout << " id   " << clusters[0].cluster_curves[i]->id << endl;
@@ -21,6 +30,38 @@ vector<cluster_vectors> random_lloyd_pam_vector(vector_struct *vectors_array, cl
     vector<cluster_vectors> clusters;
 
     clusters = random_selection_vector(vectors_array, clusterInfo.number_of_clusters, size);
+    lloydAssignmentClusterVectors(vectors_array, &clusters, size);
+    for (unsigned int l = 0; l < clusters.size(); l++)
+    {
+        cout << "cluster: " << l << "  centre  " << clusters[l].centerOfCluster->id << endl;
+        cout << "cluster: " << l << "  number of items  " << clusters[l].cluster_vectors.size() << endl;
+    }
+    return clusters;
+}
+
+///k-means
+vector<cluster_curves> kmeans_lloyd_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size, curve *temp)
+{
+    vector<cluster_curves> clusters;
+    clusters = k_means_curve(&curves, clusterInfo.number_of_clusters, size);
+    lloydAssignmentClusterCurves(&curves, &clusters);
+    for(int i=0; i<clusters.size(); i++)
+    {
+        cout <<endl<< "Cluster: "<<i << " >>"<<endl;
+        for(int j=0; j<clusters[i].cluster_curves.size(); j++)
+        {
+            cout << clusters[i].cluster_curves[j]->id <<", ";
+        }
+        cout << endl;
+    }
+    return clusters;
+}
+
+vector<cluster_vectors> kmeans_lloyd_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size)
+{
+    vector<cluster_vectors> clusters;
+
+    clusters = k_means_vector(vectors_array, clusterInfo.number_of_clusters, size);
     lloydAssignmentClusterVectors(vectors_array, &clusters, size);
     for (unsigned int l = 0; l < clusters.size(); l++)
     {
