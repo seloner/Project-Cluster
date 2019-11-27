@@ -2,17 +2,19 @@
 vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size, curve *temp)
 {
     vector<cluster_curves> clusters;
+    int counter = 0;
     clusters = random_selection_curves(&curves, clusterInfo.number_of_clusters, size);
-    lloydAssignmentClusterCurves(&curves, &clusters);
-    for(int i=0; i<clusters.size(); i++)
+    while (counter < 5)
     {
-        cout <<endl<< "Cluster: "<<i << " >>"<<endl;
-        for(int j=0; j<clusters[i].cluster_curves.size(); j++)
+        lloydAssignmentClusterCurves(&curves, &clusters);
+        for (int i = 0; i < clusters.size(); i++)
         {
-            cout << clusters[i].cluster_curves[j]->id <<", ";
+            cout << "Cluster: " << i << "  centre: " << clusters[i].centerOfCluster->id << endl;
         }
-        cout << endl;
+        lloydAssignmentClusterCurvesUpdate(&curves, &clusters);
+        counter++;
     }
+
     // for (unsigned int i = 0; i < clusters[0].cluster_curves.size(); i++)
     // {
     //     cout << " id   " << clusters[0].cluster_curves[i]->id << endl;
@@ -45,12 +47,13 @@ vector<cluster_curves> kmeans_lloyd_pam_curve(vector<curve> curves, cluster clus
     vector<cluster_curves> clusters;
     clusters = k_means_curve(&curves, clusterInfo.number_of_clusters, size);
     lloydAssignmentClusterCurves(&curves, &clusters);
-    for(int i=0; i<clusters.size(); i++)
+    for (int i = 0; i < clusters.size(); i++)
     {
-        cout <<endl<< "Cluster: "<<i << " >>"<<endl;
-        for(int j=0; j<clusters[i].cluster_curves.size(); j++)
+        cout << endl
+             << "Cluster: " << i << " >>" << endl;
+        for (int j = 0; j < clusters[i].cluster_curves.size(); j++)
         {
-            cout << clusters[i].cluster_curves[j]->id <<", ";
+            cout << clusters[i].cluster_curves[j]->id << ", ";
         }
         cout << endl;
     }
