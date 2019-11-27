@@ -7,6 +7,7 @@ vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clus
     while (counter < 5)
     {
         lloydAssignmentClusterCurves(&curves, &clusters);
+
         for (int i = 0; i < clusters.size(); i++)
         {
             cout << "Cluster: " << i << "  centre: " << clusters[i].centerOfCluster->id << endl;
@@ -30,20 +31,43 @@ vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clus
 vector<cluster_vectors> random_lloyd_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size)
 {
     vector<cluster_vectors> clusters;
-    int counter = 0;
+    vector<cluster_vectors> old_clusters;
+    unsigned int THRESHOLD = 100, counter = 0;
     clusters = random_selection_vector(vectors_array, clusterInfo.number_of_clusters, size);
-    while (counter < 10)
-    {
+    //arxikopoihsh old cluster (thelei allagi mporei h random na epistrepsei ta idia kentra )
+    old_clusters = random_selection_vector(vectors_array, clusterInfo.number_of_clusters, size);
 
+    while (compare_vectors_clusters(clusters, old_clusters) == true && counter < THRESHOLD)
+    {
+        old_clusters = copy_clusters_vector(&clusters);
         lloydAssignmentClusterVectors(vectors_array, &clusters, size);
         lloydAssignmentClusterVectorsUpdate(&clusters);
-        // for (unsigned int l = 0; l < clusters.size(); l++)
-        // {
-        //     cout << "cluster: " << l << "  centre  " << clusters[l].centerOfCluster->id << endl;
-        // }
-        // counter++;
+        counter++;
     }
     return clusters;
+}
+
+vector<cluster_vectors> copy_clusters_vector(vector<cluster_vectors> *clusters)
+{
+    vector<cluster_vectors> new_clusters;
+    for (unsigned int i = 0; i < clusters->size(); i++)
+    {
+        new_clusters.push_back(clusters->at(i));
+    }
+    return new_clusters;
+}
+bool compare_vectors_clusters(vector<cluster_vectors> current, vector<cluster_vectors> old)
+{
+    bool flag = 0;
+    for (unsigned int i = 0; i < current.size(); i++)
+    {
+        if (current[i].centerOfCluster != old[i].centerOfCluster)
+        {
+            flag = 1;
+            break;
+        }
+    }
+    return flag;
 }
 
 ///k-means
@@ -68,10 +92,22 @@ vector<cluster_curves> kmeans_lloyd_pam_curve(vector<curve> curves, cluster clus
 vector<cluster_vectors> kmeans_lloyd_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size)
 {
     vector<cluster_vectors> clusters;
-
+    vector<cluster_vectors> old_clusters;
+    unsigned int THRESHOLD = 100, counter = 0;
     clusters = k_means_vector(vectors_array, clusterInfo.number_of_clusters, size);
-    lloydAssignmentClusterVectors(vectors_array, &clusters, size);
-    lloydAssignmentClusterVectorsUpdate(&clusters);
+    //arxikopoihsh old cluster (thelei allagi mporei h random na epistrepsei ta idia kentra )
+    old_clusters = k_means_vector(vectors_array, clusterInfo.number_of_clusters, size);
 
+    while (compare_vectors_clusters(clusters, old_clusters) == true && counter < THRESHOLD)
+    {
+        old_clusters = copy_clusters_vector(&clusters);
+        for (unsigned int i = 0; i < old_clusters.size(); i++)
+        {
+            cout << "cluster old  " << i << "  centre     " << old_clusters[i].centerOfCluster->id << endl;
+        }
+        lloydAssignmentClusterVectors(vectors_array, &clusters, size);
+        lloydAssignmentClusterVectorsUpdate(&clusters);
+        counter++;
+    }
     return clusters;
 }
