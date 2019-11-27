@@ -5,8 +5,10 @@
 #include "curves.h"
 #include "clusterStructs.h"
 #include "dtw.h"
+#include "metrics.h"
 using namespace std;
 
-void lloydAssignmentClusterCurvesUpdate(vector<curve> *curves, vector<cluster_curves> *lloydAssignmentClusterArray);
+void lloydAssignmentClusterCurvesUpdate(vector<cluster_curves> *lloydAssignmentClusterArray);
+void lloydAssignmentClusterVectorsUpdate(vector<cluster_vectors> *lloydAssignmentClusterArray);
 
 #endif
