@@ -1,4 +1,9 @@
 #include "combinations.h"
+
+/* -------------------------------------------------------------------------- */
+/*                           RANDOM LLOYD PAM CURVES                          */
+/* -------------------------------------------------------------------------- */
+
 vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size, curve *temp)
 {
     vector<cluster_curves> clusters;
@@ -28,6 +33,10 @@ vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clus
     return clusters;
 }
 
+/* -------------------------------------------------------------------------- */
+/*                          RANDOM LLOYD PAM VECTORS                          */
+/* -------------------------------------------------------------------------- */
+
 vector<cluster_vectors> random_lloyd_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size)
 {
     vector<cluster_vectors> clusters;
@@ -47,31 +56,10 @@ vector<cluster_vectors> random_lloyd_pam_vector(vector_struct *vectors_array, cl
     return clusters;
 }
 
-vector<cluster_vectors> copy_clusters_vector(vector<cluster_vectors> *clusters)
-{
-    vector<cluster_vectors> new_clusters;
-    for (unsigned int i = 0; i < clusters->size(); i++)
-    {
-        new_clusters.push_back(clusters->at(i));
-    }
-    return new_clusters;
-}
+/* -------------------------------------------------------------------------- */
+/*                          KMEANS LLOYD PAM VECTORS                          */
+/* -------------------------------------------------------------------------- */
 
-bool compare_vectors_clusters(vector<cluster_vectors> current, vector<cluster_vectors> old)
-{
-    bool flag = 0;
-    for (unsigned int i = 0; i < current.size(); i++)
-    {
-        if (current[i].centerOfCluster != old[i].centerOfCluster)
-        {
-            flag = 1;
-            break;
-        }
-    }
-    return flag;
-}
-
-///k-means
 vector<cluster_vectors> kmeans_lloyd_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size)
 {
     vector<cluster_vectors> clusters;
@@ -95,25 +83,10 @@ vector<cluster_vectors> kmeans_lloyd_pam_vector(vector_struct *vectors_array, cl
     return clusters;
 }
 
-vector<cluster_vectors> kmeans_lsh_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size)
-{
-    vector<cluster_vectors> clusters;
-    vector<vector<vector<int>>> siarrays;
-    double w;
-    int dimension = vectors_array[0].vectors.size();
-    clusters = k_means_vector(vectors_array, clusterInfo.number_of_clusters, size);
-    // // w = calculateW(size, vectors_array);
-    w = 5376.42;
-    for (unsigned i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
-    {
-        siarrays.push_back(generateSi(clusterInfo.number_of_vector_hash_functions, w, dimension));
-    }
-    // {
-    //create a grid vectors array and match evey curve to the L grid
+/* -------------------------------------------------------------------------- */
+/*                           KMEANS LLOYD PAM CURVE                           */
+/* -------------------------------------------------------------------------- */
 
-    //generate si arrays
-    return clusters;
-}
 vector<cluster_curves> kmeans_lloyd_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size, curve *temp)
 {
     vector<cluster_curves> clusters;
@@ -135,6 +108,58 @@ vector<cluster_curves> kmeans_lloyd_pam_curve(vector<curve> curves, cluster clus
         counter++;
     }
     return clusters;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                           KMEANS LSH PAM VECTORS                           */
+/* -------------------------------------------------------------------------- */
+
+vector<cluster_vectors> kmeans_lsh_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size)
+{
+    vector<cluster_vectors> clusters;
+    vector<vector<vector<int>>> siarrays;
+    double w;
+    int dimension = vectors_array[0].vectors.size();
+    clusters = k_means_vector(vectors_array, clusterInfo.number_of_clusters, size);
+    // // w = calculateW(size, vectors_array);
+    w = 5376.42;
+    for (unsigned i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
+    {
+        siarrays.push_back(generateSi(clusterInfo.number_of_vector_hash_functions, w, dimension));
+    }
+    // {
+    //create a grid vectors array and match evey curve to the L grid
+
+    //generate si arrays
+    return clusters;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                   HELPERS                                  */
+/* -------------------------------------------------------------------------- */
+
+vector<cluster_vectors> copy_clusters_vector(vector<cluster_vectors> *clusters)
+{
+    vector<cluster_vectors> new_clusters;
+    for (unsigned int i = 0; i < clusters->size(); i++)
+    {
+        new_clusters.push_back(clusters->at(i));
+    }
+    return new_clusters;
+}
+
+bool compare_vectors_clusters(vector<cluster_vectors> current, vector<cluster_vectors> old)
+{
+    bool flag = 0;
+    for (unsigned int i = 0; i < current.size(); i++)
+    {
+        if (current[i].centerOfCluster != old[i].centerOfCluster)
+        {
+            flag = 1;
+            break;
+        }
+    }
+    return flag;
 }
 
 vector<cluster_curves> copy_clusters_curves(vector<cluster_curves> *clusters)
