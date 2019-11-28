@@ -1,5 +1,7 @@
 #include "combinations.h"
-
+#define mBase 2
+#define mExp 32
+#define mSub 5
 /* -------------------------------------------------------------------------- */
 /*                           RANDOM LLOYD PAM CURVES                          */
 /* -------------------------------------------------------------------------- */
@@ -116,21 +118,46 @@ vector<cluster_curves> kmeans_lloyd_pam_curve(vector<curve> curves, cluster clus
 
 vector<cluster_vectors> kmeans_lsh_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size)
 {
+    unsigned int m, M, HASH_TABLE_SIZE = size / 8;
+    int kDivisionExp;
     vector<cluster_vectors> clusters;
     vector<vector<vector<int>>> siarrays;
     double w;
+    vector<int> **hashtables;
+    hashtables = new vector<int> *[clusterInfo.number_of_vector_hash_tables];
+
+    /* -------------------------------- LSH INITS ------------------------------- */
+
     int dimension = vectors_array[0].vectors.size();
-    clusters = k_means_vector(vectors_array, clusterInfo.number_of_clusters, size);
+    m = pow(mBase, mExp) - mSub;
+    kDivisionExp = mExp / clusterInfo.number_of_vector_hash_functions;
+    M = pow(mBase, kDivisionExp);
+    //calculate w
     // // w = calculateW(size, vectors_array);
     w = 5376.42;
+
+    /* ----------------------------------  CLUSTER INIT ---------------------------------- */
+
+    clusters = k_means_vector(vectors_array, clusterInfo.number_of_clusters, size);
+
+    /* ------------------------- LSH HASHTABLES CREATION ------------------------ */
+
     for (unsigned i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
     {
+        //generate Si
         siarrays.push_back(generateSi(clusterInfo.number_of_vector_hash_functions, w, dimension));
+        //create the L hashtable
+        hashtables[i] = creteHashTable(HASH_TABLE_SIZE, dimension, vectors_array, size, clusterInfo.number_of_vector_hash_functions, w, M, m, siarrays[i]);
     }
-    // {
-    //create a grid vectors array and match evey curve to the L grid
 
-    //generate si arrays
+    /* ------------------------------- FREE MEMORY ------------------------------ */
+
+    for (unsigned int i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
+    {
+
+        delete[] hashtables[i];
+    }
+    delete[] hashtables;
     return clusters;
 }
 

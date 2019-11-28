@@ -21,15 +21,15 @@ vector<vector<int>> generateSi(int k, int w, int dimension)
     }
     return array_temp;
 }
-vector<int> *creteHashTablev2(int hash_table_size, int dimension, vector<vector<double>> vectors, int k, int w, int M, int m, vector<vector<int>> siarray)
+vector<int> *creteHashTable(int hash_table_size, int dimension, vector_struct *vectors_array, unsigned int size, int k, int w, int M, int m, vector<vector<int>> siarray)
 {
 
     unsigned int i = 0, position;
     vector<int> *hashtable;
     hashtable = new vector<int>[hash_table_size];
-    for (i = 0; i < vectors.size(); i++)
+    for (i = 0; i < size; i++)
     {
-        position = gFunction(siarray, dimension - 1, k, w, M, m, vectors[i]);
+        position = gFunction(siarray, dimension - 1, k, w, M, m, vectors_array[i].vectors);
         position = position % hash_table_size;
         hashtable[position].push_back(i);
     }
