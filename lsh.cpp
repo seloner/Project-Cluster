@@ -29,9 +29,22 @@ vector<int> *creteHashTable(int hash_table_size, int dimension, vector_struct *v
     hashtable = new vector<int>[hash_table_size];
     for (i = 0; i < size; i++)
     {
-        position = gFunction(siarray, dimension - 1, k, w, M, m, vectors_array[i].vectors);
+        position = gFunction(siarray, dimension, k, w, M, m, vectors_array[i].vectors);
         position = position % hash_table_size;
         hashtable[position].push_back(i);
     }
     return hashtable;
+}
+
+vector<int> nearestVectors(vector<vector<vector<int>>> siarrays, int dimension, int k, int w, int M, int m, int L, vector<double> query, int hash_table_size, vector<int> **hashtables)
+{
+    unsigned int position;
+    vector<int> neighbours;
+    for (unsigned int i = 0; i < L; i++)
+    {
+        position = gFunction(siarrays[i], dimension, k, w, M, m, query);
+        position = position % hash_table_size;
+    }
+
+    return neighbours;
 }

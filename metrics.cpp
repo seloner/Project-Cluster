@@ -44,7 +44,7 @@ unsigned int hFunction(vector<int> siArray, int dimensions, int W, int M, int m,
     unsigned int finalResultWithMod = 0;
     for (int i = 0; i < dimensions; i++)
     {
-        floorResult = floor((double)(xiArray[i + 1] - siArray[i]) / (double)W);
+        floorResult = floor((double)(xiArray[i] - siArray[i]) / (double)W);
         floorResultWithMod = modFunction(floorResult, M);
         expToSend = dimensions - 1 - i;
         expResult = modularExp(m, expToSend, M);
