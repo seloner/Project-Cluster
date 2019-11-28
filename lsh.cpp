@@ -52,7 +52,7 @@ vector<int> nearestVectors(vector<vector<vector<int>>> siarrays, int dimension, 
 
 
 vector<int> bucketRangeSearch(vector_struct *vectors_array,unsigned int size ,vector<int> bucket, vector_struct query,unsigned int range){
-            vector<int> results;
+    vector<int> results;
     for(unsigned int i=0;i<bucket.size();i++){
         if(manhattanDistance(vectors_array[bucket[i]].vectors,query.vectors)<range){
             results.push_back(bucket[i]);
