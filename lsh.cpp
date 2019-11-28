@@ -36,15 +36,29 @@ vector<int> *creteHashTable(int hash_table_size, int dimension, vector_struct *v
     return hashtable;
 }
 
-vector<int> nearestVectors(vector<vector<vector<int>>> siarrays, int dimension, int k, int w, int M, int m, int L, vector<double> query, int hash_table_size, vector<int> **hashtables)
+vector<int> nearestVectors(vector<vector<vector<int>>> siarrays, int dimension, int k, int w, int M, int m, int L, vector_struct query, int hash_table_size, vector<int> **hashtables,vector_struct *vectors_array,unsigned int size,unsigned int range)
 {
     unsigned int position;
     vector<int> neighbours;
     for (unsigned int i = 0; i < L; i++)
     {
-        position = gFunction(siarrays[i], dimension, k, w, M, m, query);
+        position = gFunction(siarrays[i], dimension, k, w, M, m, query.vectors);
         position = position % hash_table_size;
+        neighbours=bucketRangeSearch(vectors_array,size,hashtables[i][position],query,range);
     }
 
     return neighbours;
+}
+
+
+vector<int> bucketRangeSearch(vector_struct *vectors_array,unsigned int size ,vector<int> bucket, vector_struct query,unsigned int range){
+            vector<int> results;
+    for(unsigned int i=0;i<bucket.size();i++){
+        if(manhattanDistance(vectors_array[bucket[i]].vectors,query.vectors)<range){
+            results.push_back(bucket[i]);
+        }
+
+    }
+    return results;
+
 }

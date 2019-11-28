@@ -125,7 +125,7 @@ vector<cluster_vectors> kmeans_lsh_pam_vector(vector_struct *vectors_array, clus
     double w;
     vector<int> **hashtables;
     hashtables = new vector<int> *[clusterInfo.number_of_vector_hash_tables];
-
+    vector<int> lsh_matches;
     /* -------------------------------- LSH INITS ------------------------------- */
 
     int dimension = vectors_array[0].vectors.size();
@@ -148,8 +148,14 @@ vector<cluster_vectors> kmeans_lsh_pam_vector(vector_struct *vectors_array, clus
         siarrays.push_back(generateSi(clusterInfo.number_of_vector_hash_functions, w, dimension));
         //create the L hashtable
         hashtables[i] = creteHashTable(HASH_TABLE_SIZE, dimension, vectors_array, size, clusterInfo.number_of_vector_hash_functions, w, M, m, siarrays[i]);
-    }
 
+    }
+    lsh_matches=nearestVectors(siarrays,dimension,clusterInfo.number_of_vector_hash_functions,w,M,m,clusterInfo.number_of_vector_hash_tables,*(clusters[0].centerOfCluster),HASH_TABLE_SIZE,hashtables,vectors_array,size,100);
+for(unsigned int l=0;l<lsh_matches.size();l++){
+
+    cout<<"match position : "<<lsh_matches[l]<<endl;
+
+}
     /* ------------------------------- FREE MEMORY ------------------------------ */
 
     for (unsigned int i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
@@ -212,3 +218,6 @@ bool compare_curves_clusters(vector<cluster_curves> current, vector<cluster_curv
     }
     return flag;
 }
+
+
+
