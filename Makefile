@@ -1,6 +1,6 @@
-OBJS 	= main.o readFunctions.o vector.o printFunctions.o  initialization.o metrics.o assignment.o curves.o dtw.o update.o combinations.o
-SOURCE	= main.cpp readFunctions.cpp vector.cpp printFunctions.cpp initialization.cpp metrics.cpp assignment.cpp curves.cpp dtw.cpp update.cpp combinations.cpp
-HEADER  = readFunctions.h vector.h printFunctions.h initialization.h clusterStructs.h metrics.h assignment.h curves.h dtw.h update.h combinations.h
+OBJS 	= main.o readFunctions.o vector.o printFunctions.o  initialization.o metrics.o assignment.o curves.o dtw.o update.o combinations.o lsh.o
+SOURCE	= main.cpp readFunctions.cpp vector.cpp printFunctions.cpp initialization.cpp metrics.cpp assignment.cpp curves.cpp dtw.cpp update.cpp combinations.cpp lsh.cpp
+HEADER  = readFunctions.h vector.h printFunctions.h initialization.h clusterStructs.h metrics.h assignment.h curves.h dtw.h update.h combinations.h	lsh.h
 OUT  	= cluster
 FLAGS   = -g -c
 CC	= g++
@@ -27,7 +27,8 @@ curves.o: curves.cpp
 	$(CC)  $(FLAGS) curves.cpp
 update.o: update.cpp
 	$(CC)  $(FLAGS) update.cpp
-
+lsh.o: lsh.cpp
+	$(CC)  $(FLAGS) lsh.cpp
 metrics.o: metrics.cpp
 	$(CC)  $(FLAGS) metrics.cpp
 dtw.o: dtw.cpp
@@ -39,4 +40,4 @@ clean:
 
 # do a bit of accounting
 count:
-	wc $(SOURCE) $(HEADER)
+	wc -l $(SOURCE) $(HEADER)

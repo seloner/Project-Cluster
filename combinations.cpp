@@ -111,3 +111,23 @@ vector<cluster_vectors> kmeans_lloyd_pam_vector(vector_struct *vectors_array, cl
     }
     return clusters;
 }
+
+vector<cluster_vectors> kmeans_lsh_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size)
+{
+    vector<cluster_vectors> clusters;
+    vector<vector<vector<int>>> siarrays;
+    double w;
+    int dimension = vectors_array[0].vectors.size();
+    clusters = k_means_vector(vectors_array, clusterInfo.number_of_clusters, size);
+    // // w = calculateW(size, vectors_array);
+    w = 5376.42;
+    for (unsigned i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
+    {
+        siarrays.push_back(generateSi(clusterInfo.number_of_vector_hash_functions, w, dimension));
+    }
+    // {
+    //create a grid vectors array and match evey curve to the L grid
+
+    //generate si arrays
+    return clusters;
+}
