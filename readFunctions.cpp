@@ -153,8 +153,8 @@ void readClusterConf(char *path, cluster &clusterInfo)
         }
         //cout <<"insideCounter: "<<insideCounter <<" #comingString#"<<endl<< comingString<<endl;
     }
-    clusterInfo.number_of_vector_hash_functions = getTheNumber;
-    cout << "number_of_vector_hash_functions:" << getTheNumber << endl;
+    clusterInfo.number_of_vector_hash_tables = getTheNumber;
+    cout << "number_of_vector_hash_tables:" << getTheNumber << endl;
 
     //line 4 of conf
     beg = 0, pos = 0;
@@ -173,8 +173,8 @@ void readClusterConf(char *path, cluster &clusterInfo)
         //cout <<"#comingString#"<<endl<< comingString<<endl;
         insideCounter++;
     }
-    clusterInfo.number_of_vector_hash_tables = getTheNumber;
-    cout << "number_of_vector_hash_tables:" << getTheNumber << endl;
+    clusterInfo.number_of_vector_hash_functions = getTheNumber;
+    cout << "number_of_vector_hash_functions:" << getTheNumber << endl;
     cout << endl;
     file.close();
 }
