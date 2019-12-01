@@ -22,6 +22,9 @@ int main(int argc, char const *argv[])
     vector<cluster_vectors> vectors_clusters;
     cluster clusterInfo;
 
+    //we use this at Silhouette
+    ofstream outputFile;
+
     // read args
     for (i = 1; i < argc; i++)
     {
@@ -51,9 +54,16 @@ int main(int argc, char const *argv[])
             else
             {
                 strcpy(OUTPUT_PATH, argv[i + 1]);
+                outputFile.open(OUTPUT_PATH);
             }
         }
     }
+    
+    // strcpy(INPUT_PATH, "data/DataVectors_5_500x500.csv");
+    // strcpy(CONF_PATH, "data/cluster.conf");
+    // strcpy(OUTPUT_PATH, "outputVectorRandom.txt");
+
+
 
     // init rand
     srand(time(NULL));
@@ -73,14 +83,15 @@ int main(int argc, char const *argv[])
     readClusterConf(CONF_PATH, clusterInfo);
 
     cout << "Input size: " << INPUT_SIZE << endl;
+    outputFile << "Algorithm: ΙxAxUx" << endl;
 
     if (vector_file) // case type is vector
     {
         DIMENSIONS = calculateDimension(INPUT_PATH);
         array_of_vectors = new vector_struct[INPUT_SIZE];
         fillVectors(DIMENSIONS, INPUT_SIZE, INPUT_PATH, array_of_vectors);
-        //vectors_clusters = random_lloyd_pam_vector(array_of_vectors, clusterInfo, INPUT_SIZE);
-        vectors_clusters = kmeans_lsh_pam_vector(array_of_vectors, clusterInfo, INPUT_SIZE);
+        vectors_clusters = random_lloyd_pam_vector(array_of_vectors, clusterInfo, INPUT_SIZE, outputFile);
+        //vectors_clusters = kmeans_lsh_pam_vector(array_of_vectors, clusterInfo, INPUT_SIZE);
     }
     else // case type is curve
     {
@@ -91,8 +102,8 @@ int main(int argc, char const *argv[])
         }
         calculateCurveDimensions(INPUT_PATH, curves, INPUT_SIZE);
         fillVectorWithCurves(INPUT_PATH, curves, INPUT_SIZE);
-        //curves_clusters = random_lloyd_pam_curve(curves, clusterInfo, INPUT_SIZE, array_of_curves);
-        curves_clusters = kmeans_lloyd_pam_curve(curves, clusterInfo, INPUT_SIZE, array_of_curves);
+        curves_clusters = random_lloyd_pam_curve(curves, clusterInfo, INPUT_SIZE, array_of_curves, outputFile);
+        //curves_clusters = kmeans_lloyd_pam_curve(curves, clusterInfo, INPUT_SIZE, array_of_curves);
     }
 
     /**
@@ -106,9 +117,7 @@ int main(int argc, char const *argv[])
 
         delete[] array_of_vectors;
     }
-
-    //delete clusterInfo
-    //delete clusterInfo;
+    outputFile.close();
 
     return 0;
 }

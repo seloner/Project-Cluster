@@ -6,14 +6,14 @@
 /*                           RANDOM LLOYD PAM CURVES                          */
 /* -------------------------------------------------------------------------- */
 
-vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size, curve *temp)
+vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size, curve *temp, ofstream &outputFile)
 {
     vector<cluster_curves> clusters;
     int counter = 0;
     clusters = random_selection_curves(&curves, clusterInfo.number_of_clusters, size);
     while (counter < 5)
     {
-        lloydAssignmentClusterCurves(&curves, &clusters);
+        lloydAssignmentClusterCurves(&curves, &clusters, outputFile);
 
         for (int i = 0; i < clusters.size(); i++)
         {
@@ -39,22 +39,37 @@ vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clus
 /*                          RANDOM LLOYD PAM VECTORS                          */
 /* -------------------------------------------------------------------------- */
 
-vector<cluster_vectors> random_lloyd_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size)
+vector<cluster_vectors> random_lloyd_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size, ofstream &outputFile)
 {
     vector<cluster_vectors> clusters;
     vector<cluster_vectors> old_clusters;
+    vector<cluster_vectors> secondBetterCluster;
+
+    vector<float> silhouetteResults;
+
     unsigned int THRESHOLD = 100, counter = 0;
     clusters = random_selection_vector(vectors_array, clusterInfo.number_of_clusters, size);
     //arxikopoihsh old cluster (thelei allagi mporei h random na epistrepsei ta idia kentra )
     old_clusters = random_selection_vector(vectors_array, clusterInfo.number_of_clusters, size);
 
+    auto startC = chrono::steady_clock::now();
     while (compare_vectors_clusters(clusters, old_clusters) == true && counter < THRESHOLD)
     {
+        if(compare_vectors_clusters(clusters, old_clusters) == false)
+        {
+            secondBetterCluster = copy_clusters_vector(&clusters);
+        }
         old_clusters = copy_clusters_vector(&clusters);
-        lloydAssignmentClusterVectors(vectors_array, &clusters, size);
+        lloydAssignmentClusterVectors(vectors_array, &clusters, size, outputFile);
         lloydAssignmentClusterVectorsUpdate(&clusters);
         counter++;
     }
+    auto endC = chrono::steady_clock::now();
+    auto diff = endC - startC;
+    
+    outputFile <<"clustering_time: "<< (chrono::duration<double, milli>(diff).count()) / 1000<<" //seconds"<<endl;
+
+    silhouetteResults = runSilhouetteForVectors(&clusters);
     return clusters;
 }
 
@@ -78,7 +93,7 @@ vector<cluster_vectors> kmeans_lloyd_pam_vector(vector_struct *vectors_array, cl
         {
             cout << "cluster old  " << i << "  centre     " << old_clusters[i].centerOfCluster->id << endl;
         }
-        lloydAssignmentClusterVectors(vectors_array, &clusters, size);
+        //lloydAssignmentClusterVectors(vectors_array, &clusters, size);
         lloydAssignmentClusterVectorsUpdate(&clusters);
         counter++;
     }
@@ -105,7 +120,7 @@ vector<cluster_curves> kmeans_lloyd_pam_curve(vector<curve> curves, cluster clus
         {
             cout << "cluster old  " << i << "  centre     " << old_clusters[i].centerOfCluster->id << endl;
         }
-        lloydAssignmentClusterCurves(&curves, &clusters);
+        //lloydAssignmentClusterCurves(&curves, &clusters);
         lloydAssignmentClusterCurvesUpdate(&clusters);
         counter++;
     }
@@ -237,3 +252,70 @@ void pushLshResultsToClusterCurves( vector<curve> *curves,vector<int> results,cl
 
 }
 
+vector<float> runSilhouetteForVectors(vector<cluster_vectors> *clusters)
+{
+    vector<float> silhouetteResults;
+
+    double average=0, distance=0;
+    cout << "DEBUG 1"<<endl;
+    for(int i=0; i<clusters->size(); i++)
+    {
+    cout << "DEBUG 1A"<<endl;
+
+        for(int j=0; j<clusters->at(i).cluster_vectors[i]->vectors.size(); j++)
+        {
+                cout << "DEBUG 2"<<endl;
+            for(int w=0; w<clusters->at(i).cluster_vectors[j]->vectors.size(); w++)
+            {
+                    cout << "DEBUG 3"<<endl;
+
+                // if(clusters->at(i).cluster_vectors[w]->id != clusters->at(i).centerOfCluster->id)
+                // {
+                    //distance = manhattanDistance(clusters->at(i).cluster_vectors[j]->vectors[j], clusters->at(i).cluster_vectors[w]->vectors);
+                            cout <<"distance: "<<distance<<endl;
+
+                //}
+            }
+            cout <<"final distance: "<<distance <<endl;
+            average = distance/clusters->at(i).cluster_vectors[j]->vectors.size();
+            cout <<"average distance: "<<average <<endl;
+            distance = 0;
+        }
+    }
+
+    return silhouetteResults;
+}
+
+vector<float> runSilhouetteForCurves(vector<cluster_curves> *clusters)
+{
+    vector<float> silhouetteResults;
+
+    double average=0, distance=0;
+    cout << "DEBUG 1"<<endl;
+    for(int i=0; i<clusters->size(); i++)
+    {
+    cout << "DEBUG 1A"<<endl;
+
+        // for(int j=0; j<clusters->at(i).cluster_vectors[i]->vectors.size(); j++)
+        // {
+        //         cout << "DEBUG 2"<<endl;
+        //     for(int w=0; w<clusters->at(i).cluster_vectors[j]->vectors.size(); w++)
+        //     {
+        //             cout << "DEBUG 3"<<endl;
+
+        //         // if(clusters->at(i).cluster_vectors[w]->id != clusters->at(i).centerOfCluster->id)
+        //         // {
+        //             //distance = manhattanDistance(clusters->at(i).cluster_vectors[j]->vectors[j], clusters->at(i).cluster_vectors[w]->vectors);
+        //                     cout <<"distance: "<<distance<<endl;
+
+        //         //}
+        //     }
+        //     cout <<"final distance: "<<distance <<endl;
+        //     average = distance/clusters->at(i).cluster_vectors[j]->vectors.size();
+            cout <<"average distance: "<<average <<endl;
+            distance = 0;
+       // }
+    }
+
+    return silhouetteResults;
+}
