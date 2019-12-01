@@ -9,7 +9,7 @@ typedef struct
 {
     vector<double> vectors;
     string id;
-    bool intoCluster;
+    unsigned int cluster_index;
 } vector_struct;
 void fillVectors(int dimension, int size, char *input_file_path, vector_struct *vectors_array);
 double NearestNeighbourDistance(int size, vector_struct *array, vector_struct query);

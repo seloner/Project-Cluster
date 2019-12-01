@@ -25,7 +25,7 @@ void fillVectors(int dimension, int size, char *input_file_path, vector_struct *
             convert >> x;
             if (j == 0)
             {
-                vectors_array[i].intoCluster = 0;
+                vectors_array[i].cluster_index = -1;
                 vectors_array[i].id = temp;
             }
             else

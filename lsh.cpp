@@ -39,15 +39,22 @@ vector<int> *creteHashTable(int hash_table_size, int dimension, vector_struct *v
 vector<int> nearestVectors(vector<vector<vector<int>>> siarrays, int dimension, int k, int w, int M, int m, int L, vector_struct query, int hash_table_size, vector<int> **hashtables,vector_struct *vectors_array,unsigned int size,unsigned int range)
 {
     unsigned int position;
-    vector<int> neighbours;
+    vector<int> bucket_neighbours;
+    vector<int> query_neighbours;
     for (unsigned int i = 0; i < L; i++)
     {
         position = gFunction(siarrays[i], dimension, k, w, M, m, query.vectors);
         position = position % hash_table_size;
-        neighbours=bucketRangeSearch(vectors_array,size,hashtables[i][position],query,range);
+        bucket_neighbours=bucketRangeSearch(vectors_array,size,hashtables[i][position],query,range);
+        for(unsigned int j=0;j<bucket_neighbours.size();j++){
+            //if vector's index doesnt exist in the results then push back to the quury results
+            if(vectorExists(bucket_neighbours[j],query_neighbours)==0){
+                query_neighbours.push_back(bucket_neighbours[j]);
+            }
+        }
     }
 
-    return neighbours;
+    return query_neighbours;
 }
 
 
@@ -55,10 +62,18 @@ vector<int> bucketRangeSearch(vector_struct *vectors_array,unsigned int size ,ve
     vector<int> results;
     for(unsigned int i=0;i<bucket.size();i++){
         if(manhattanDistance(vectors_array[bucket[i]].vectors,query.vectors)<range){
-            results.push_back(bucket[i]);
-        }
-
+                results.push_back(bucket[i]);
+        } 
     }
     return results;
 
+}
+
+bool vectorExists(unsigned int index,vector<int> all_indexes){
+    for(unsigned int i=0;i<all_indexes.size();i++){
+        if(index==all_indexes[i]){
+             return 1;
+         }
+    }
+    return 0;
 }
