@@ -60,26 +60,6 @@ vector<cluster_vectors> random_lloyd_pam_vector(vector_struct *vectors_array, cl
 {
   vector<cluster_vectors> clusters;
   vector<cluster_vectors> old_clusters;
-  unsigned int THRESHOLD = 100, counter = 0;
-  clusters = random_selection_vector(vectors_array, clusterInfo.number_of_clusters, size);
-  // arxikopoihsh old cluster (thelei allagi mporei h random na epistrepsei ta
-  // idia kentra )
-  old_clusters = random_selection_vector(vectors_array, clusterInfo.number_of_clusters, size);
-
-  while (compare_vectors_clusters(clusters, old_clusters) == true &&
-         counter < THRESHOLD)
-  {
-    old_clusters = copy_clusters_vector(&clusters);
-    lloydAssignmentClusterVectors(vectors_array, &clusters, size, outputFile);
-    lloydAssignmentClusterVectorsUpdate(&clusters);
-    counter++;
-  }
-  return clusters;
-}
-vector<cluster_vectors> random_lloyd_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size, ofstream &outputFile)
-{
-  vector<cluster_vectors> clusters;
-  vector<cluster_vectors> old_clusters;
   vector<cluster_vectors> secondBetterCluster;
 
   vector<float> silhouetteResults;
@@ -250,8 +230,7 @@ copy_clusters_vector(vector<cluster_vectors> *clusters)
   return new_clusters;
 }
 
-bool compare_vectors_clusters(vector<cluster_vectors> current,
-                              vector<cluster_vectors> old)
+bool compare_vectors_clusters(vector<cluster_vectors> current, vector<cluster_vectors> old)
 {
   bool flag = 0;
   for (unsigned int i = 0; i < current.size(); i++)
