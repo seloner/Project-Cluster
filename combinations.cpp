@@ -9,29 +9,46 @@
 vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size, curve *temp, ofstream &outputFile)
 {
     vector<cluster_curves> clusters;
-    int counter = 0;
-    clusters = random_selection_curves(&curves, clusterInfo.number_of_clusters, size);
-    while (counter < 5)
-    {
-        lloydAssignmentClusterCurves(&curves, &clusters, outputFile);
+    vector<cluster_curves> old_clusters;
+    vector<cluster_curves> secondBetterCluster;
 
-        for (int i = 0; i < clusters.size(); i++)
+    vector<float> silhouetteResults;
+
+    unsigned int THRESHOLD = 100, counter = 0;
+    clusters = random_selection_curves(&curves, clusterInfo.number_of_clusters, size);
+    //arxikopoihsh old cluster (thelei allagi mporei h random na epistrepsei ta idia kentra )
+    old_clusters = random_selection_curves(&curves, clusterInfo.number_of_clusters, size);
+
+    //clusters = random_selection_curves(&curves, clusterInfo.number_of_clusters, size);
+    // while (counter < 5)
+    // {
+    //     lloydAssignmentClusterCurves(&curves, &clusters, outputFile);
+
+    //     for (int i = 0; i < clusters.size(); i++)
+    //     {
+    //         cout << "Cluster: " << i << "  centre: " << clusters[i].centerOfCluster->id << endl;
+    //     }
+    //     lloydAssignmentClusterCurvesUpdate(&clusters);
+    //     counter++;
+    // }
+
+    auto startC = chrono::steady_clock::now();
+    while (compare_curves_clusters(clusters, old_clusters) == true && counter < 5)
+    {
+        if(compare_curves_clusters(clusters, old_clusters) == false)
         {
-            cout << "Cluster: " << i << "  centre: " << clusters[i].centerOfCluster->id << endl;
+            secondBetterCluster = copy_clusters_curves(&clusters);
         }
+        old_clusters = copy_clusters_curves(&clusters);
+        lloydAssignmentClusterCurves(&curves, &clusters, outputFile);
         lloydAssignmentClusterCurvesUpdate(&clusters);
         counter++;
     }
+    auto endC = chrono::steady_clock::now();
+    auto diff = endC - startC;
+    outputFile <<"clustering_time: "<< (chrono::duration<double, milli>(diff).count()) / 1000<<" //seconds"<<endl;
 
-    // for (unsigned int i = 0; i < clusters[0].cluster_curves.size(); i++)
-    // {
-    //     cout << " id   " << clusters[0].cluster_curves[i]->id << endl;
-    // }
-    // for (unsigned int i = 0; i < clusters[1].cluster_curves.size(); i++)
-    // {
-    //     cout << " id   " << clusters[1].cluster_curves[i]->id << endl;
-    // }
-
+    silhouetteResults = runSilhouetteForCurves(&clusters);
     return clusters;
 }
 
