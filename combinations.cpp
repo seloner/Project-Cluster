@@ -6,34 +6,50 @@
 /*                           RANDOM LLOYD PAM CURVES                          */
 /* -------------------------------------------------------------------------- */
 
-vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves,
-                                              cluster clusterInfo,
-                                              unsigned int size, curve *temp) {
-  vector<cluster_curves> clusters;
-  int counter = 0;
-  clusters =
-      random_selection_curves(&curves, clusterInfo.number_of_clusters, size);
-  while (counter < 5) {
-    lloydAssignmentClusterCurves(&curves, &clusters);
+vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size, curve *temp, ofstream &outputFile)
+{
+    vector<cluster_curves> clusters;
+    vector<cluster_curves> old_clusters;
+    vector<cluster_curves> secondBetterCluster;
 
-    for (int i = 0; i < clusters.size(); i++) {
-      cout << "Cluster: " << i
-           << "  centre: " << clusters[i].centerOfCluster->id << endl;
+    vector<float> silhouetteResults;
+
+    unsigned int THRESHOLD = 100, counter = 0;
+    clusters = random_selection_curves(&curves, clusterInfo.number_of_clusters, size);
+    //arxikopoihsh old cluster (thelei allagi mporei h random na epistrepsei ta idia kentra )
+    old_clusters = random_selection_curves(&curves, clusterInfo.number_of_clusters, size);
+
+    //clusters = random_selection_curves(&curves, clusterInfo.number_of_clusters, size);
+    // while (counter < 5)
+    // {
+    //     lloydAssignmentClusterCurves(&curves, &clusters, outputFile);
+
+    //     for (int i = 0; i < clusters.size(); i++)
+    //     {
+    //         cout << "Cluster: " << i << "  centre: " << clusters[i].centerOfCluster->id << endl;
+    //     }
+    //     lloydAssignmentClusterCurvesUpdate(&clusters);
+    //     counter++;
+    // }
+
+    auto startC = chrono::steady_clock::now();
+    while (compare_curves_clusters(clusters, old_clusters) == true && counter < 5)
+    {
+        if(compare_curves_clusters(clusters, old_clusters) == false)
+        {
+            secondBetterCluster = copy_clusters_curves(&clusters);
+        }
+        old_clusters = copy_clusters_curves(&clusters);
+        lloydAssignmentClusterCurves(&curves, &clusters, outputFile);
+        lloydAssignmentClusterCurvesUpdate(&clusters);
+        counter++;
     }
-    lloydAssignmentClusterCurvesUpdate(&clusters);
-    counter++;
-  }
+    auto endC = chrono::steady_clock::now();
+    auto diff = endC - startC;
+    outputFile <<"clustering_time: "<< (chrono::duration<double, milli>(diff).count()) / 1000<<" //seconds"<<endl;
 
-  // for (unsigned int i = 0; i < clusters[0].cluster_curves.size(); i++)
-  // {
-  //     cout << " id   " << clusters[0].cluster_curves[i]->id << endl;
-  // }
-  // for (unsigned int i = 0; i < clusters[1].cluster_curves.size(); i++)
-  // {
-  //     cout << " id   " << clusters[1].cluster_curves[i]->id << endl;
-  // }
-
-  return clusters;
+    silhouetteResults = runSilhouetteForCurves(&clusters);
+    return clusters;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -62,11 +78,45 @@ vector<cluster_vectors> random_lloyd_pam_vector(vector_struct *vectors_array,
   }
   return clusters;
 }
+vector<cluster_vectors> random_lloyd_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size, ofstream &outputFile)
+{
+    vector<cluster_vectors> clusters;
+    vector<cluster_vectors> old_clusters;
+    vector<cluster_vectors> secondBetterCluster;
+
+    vector<float> silhouetteResults;
+
+    unsigned int THRESHOLD = 100, counter = 0;
+    clusters = random_selection_vector(vectors_array, clusterInfo.number_of_clusters, size);
+    //arxikopoihsh old cluster (thelei allagi mporei h random na epistrepsei ta idia kentra )
+    old_clusters = random_selection_vector(vectors_array, clusterInfo.number_of_clusters, size);
+
+    auto startC = chrono::steady_clock::now();
+    while (compare_vectors_clusters(clusters, old_clusters) == true && counter < THRESHOLD)
+    {
+        if(compare_vectors_clusters(clusters, old_clusters) == false)
+        {
+            secondBetterCluster = copy_clusters_vector(&clusters);
+        }
+        old_clusters = copy_clusters_vector(&clusters);
+        lloydAssignmentClusterVectors(vectors_array, &clusters, size, outputFile);
+        lloydAssignmentClusterVectorsUpdate(&clusters);
+        counter++;
+    }
+    auto endC = chrono::steady_clock::now();
+    auto diff = endC - startC;
+    
+    outputFile <<"clustering_time: "<< (chrono::duration<double, milli>(diff).count()) / 1000<<" //seconds"<<endl;
+
+    silhouetteResults = runSilhouetteForVectors(&clusters);
+    return clusters;
+}
 
 /* -------------------------------------------------------------------------- */
 /*                          KMEANS LLOYD PAM VECTORS                          */
 /* -------------------------------------------------------------------------- */
 
+<<<<<<< HEAD
 vector<cluster_vectors> kmeans_lloyd_pam_vector(vector_struct *vectors_array,
                                                 cluster clusterInfo,
                                                 unsigned int size) {
@@ -86,6 +136,27 @@ vector<cluster_vectors> kmeans_lloyd_pam_vector(vector_struct *vectors_array,
     for (unsigned int i = 0; i < old_clusters.size(); i++) {
       cout << "cluster old  " << i << "  centre     "
            << old_clusters[i].centerOfCluster->id << endl;
+=======
+vector<cluster_vectors> kmeans_lloyd_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size)
+{
+    vector<cluster_vectors> clusters;
+    vector<cluster_vectors> old_clusters;
+    unsigned int THRESHOLD = 100, counter = 0;
+    clusters = k_means_vector(vectors_array, clusterInfo.number_of_clusters, size);
+    //arxikopoihsh old cluster (thelei allagi mporei h random na epistrepsei ta idia kentra )
+    old_clusters = k_means_vector(vectors_array, clusterInfo.number_of_clusters, size);
+
+    while (compare_vectors_clusters(clusters, old_clusters) == true && counter < THRESHOLD)
+    {
+        old_clusters = copy_clusters_vector(&clusters);
+        for (unsigned int i = 0; i < old_clusters.size(); i++)
+        {
+            cout << "cluster old  " << i << "  centre     " << old_clusters[i].centerOfCluster->id << endl;
+        }
+        //lloydAssignmentClusterVectors(vectors_array, &clusters, size);
+        lloydAssignmentClusterVectorsUpdate(&clusters);
+        counter++;
+>>>>>>> b4386cb142764a7e42fd9e5e5836d84853119806
     }
     lloydAssignmentClusterVectors(vectors_array, &clusters, size);
     lloydAssignmentClusterVectorsUpdate(&clusters);
@@ -98,6 +169,7 @@ vector<cluster_vectors> kmeans_lloyd_pam_vector(vector_struct *vectors_array,
 /*                           KMEANS LLOYD PAM CURVE                           */
 /* -------------------------------------------------------------------------- */
 
+<<<<<<< HEAD
 vector<cluster_curves> kmeans_lloyd_pam_curve(vector<curve> curves,
                                               cluster clusterInfo,
                                               unsigned int size, curve *temp) {
@@ -115,6 +187,27 @@ vector<cluster_curves> kmeans_lloyd_pam_curve(vector<curve> curves,
     for (unsigned int i = 0; i < old_clusters.size(); i++) {
       cout << "cluster old  " << i << "  centre     "
            << old_clusters[i].centerOfCluster->id << endl;
+=======
+vector<cluster_curves> kmeans_lloyd_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size, curve *temp)
+{
+    vector<cluster_curves> clusters;
+    vector<cluster_curves> old_clusters;
+    unsigned int THRESHOLD = 100, counter = 0;
+    clusters = k_means_curve(&curves, clusterInfo.number_of_clusters, size);
+    //arxikopoihsh old cluster (thelei allagi mporei h random na epistrepsei ta idia kentra )
+    old_clusters = k_means_curve(&curves, clusterInfo.number_of_clusters, size);
+
+    while (compare_curves_clusters(clusters, old_clusters) == true && counter < THRESHOLD)
+    {
+        old_clusters = copy_clusters_curves(&clusters);
+        for (unsigned int i = 0; i < old_clusters.size(); i++)
+        {
+            cout << "cluster old  " << i << "  centre     " << old_clusters[i].centerOfCluster->id << endl;
+        }
+        //lloydAssignmentClusterCurves(&curves, &clusters);
+        lloydAssignmentClusterCurvesUpdate(&clusters);
+        counter++;
+>>>>>>> b4386cb142764a7e42fd9e5e5836d84853119806
     }
     lloydAssignmentClusterCurves(&curves, &clusters);
     lloydAssignmentClusterCurvesUpdate(&clusters);
@@ -255,3 +348,74 @@ void pushLshResultsToClusterCurves(vector<curve> *curves, vector<int> results,
     cluster->cluster_curves.push_back(&curves->at(results[i]));
   }
 }
+<<<<<<< HEAD
+=======
+
+vector<float> runSilhouetteForVectors(vector<cluster_vectors> *clusters)
+{
+    vector<float> silhouetteResults;
+
+    double average=0, distance=0;
+    cout << "DEBUG 1"<<endl;
+    for(int i=0; i<clusters->size(); i++)
+    {
+    cout << "DEBUG 1A"<<endl;
+
+        for(int j=0; j<clusters->at(i).cluster_vectors[i]->vectors.size(); j++)
+        {
+                cout << "DEBUG 2"<<endl;
+            for(int w=0; w<clusters->at(i).cluster_vectors[j]->vectors.size(); w++)
+            {
+                    cout << "DEBUG 3"<<endl;
+
+                // if(clusters->at(i).cluster_vectors[w]->id != clusters->at(i).centerOfCluster->id)
+                // {
+                    //distance = manhattanDistance(clusters->at(i).cluster_vectors[j]->vectors[j], clusters->at(i).cluster_vectors[w]->vectors);
+                            cout <<"distance: "<<distance<<endl;
+
+                //}
+            }
+            cout <<"final distance: "<<distance <<endl;
+            average = distance/clusters->at(i).cluster_vectors[j]->vectors.size();
+            cout <<"average distance: "<<average <<endl;
+            distance = 0;
+        }
+    }
+
+    return silhouetteResults;
+}
+
+vector<float> runSilhouetteForCurves(vector<cluster_curves> *clusters)
+{
+    vector<float> silhouetteResults;
+
+    double average=0, distance=0;
+    cout << "DEBUG 1"<<endl;
+    for(int i=0; i<clusters->size(); i++)
+    {
+    cout << "DEBUG 1A"<<endl;
+
+        // for(int j=0; j<clusters->at(i).cluster_vectors[i]->vectors.size(); j++)
+        // {
+        //         cout << "DEBUG 2"<<endl;
+        //     for(int w=0; w<clusters->at(i).cluster_vectors[j]->vectors.size(); w++)
+        //     {
+        //             cout << "DEBUG 3"<<endl;
+
+        //         // if(clusters->at(i).cluster_vectors[w]->id != clusters->at(i).centerOfCluster->id)
+        //         // {
+        //             //distance = manhattanDistance(clusters->at(i).cluster_vectors[j]->vectors[j], clusters->at(i).cluster_vectors[w]->vectors);
+        //                     cout <<"distance: "<<distance<<endl;
+
+        //         //}
+        //     }
+        //     cout <<"final distance: "<<distance <<endl;
+        //     average = distance/clusters->at(i).cluster_vectors[j]->vectors.size();
+            cout <<"average distance: "<<average <<endl;
+            distance = 0;
+       // }
+    }
+
+    return silhouetteResults;
+}
+>>>>>>> b4386cb142764a7e42fd9e5e5836d84853119806
