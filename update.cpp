@@ -64,6 +64,5 @@ void lloydAssignmentClusterVectorsUpdate(vector<cluster_vectors> *lloydAssignmen
         }
         cout << "new centre: " << new_centre->id << endl;
         lloydAssignmentClusterArray->at(j).centerOfCluster = new_centre;
-        lloydAssignmentClusterArray->at(j).cluster_vectors.clear();
     }
 }

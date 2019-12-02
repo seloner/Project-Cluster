@@ -12,5 +12,5 @@
 using namespace std;
 
 void lloydAssignmentClusterCurves(vector<curve> *curves, vector<cluster_curves> *curves_clusters, ofstream &outputFile);
-void lloydAssignmentClusterVectors(vector_struct *vectors_array, vector<cluster_vectors> *clusters, unsigned int size, ofstream &outputFile);
+void lloydAssignmentClusterVectors(vector_struct *vectors_array, vector<cluster_vectors> *clusters, unsigned int size);
 #endif

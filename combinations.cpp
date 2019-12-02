@@ -63,7 +63,7 @@ vector<cluster_vectors> random_lloyd_pam_vector(vector_struct *vectors_array, cl
   vector<cluster_vectors> secondBetterCluster;
 
   vector<float> silhouetteResults;
-
+  char case_name[20] = "RANDOM LLOYD PAM";
   unsigned int THRESHOLD = 100, counter = 0;
   clusters = random_selection_vector(vectors_array, clusterInfo.number_of_clusters, size);
   //arxikopoihsh old cluster (thelei allagi mporei h random na epistrepsei ta idia kentra )
@@ -77,7 +77,7 @@ vector<cluster_vectors> random_lloyd_pam_vector(vector_struct *vectors_array, cl
       secondBetterCluster = copy_clusters_vector(&clusters);
     }
     old_clusters = copy_clusters_vector(&clusters);
-    lloydAssignmentClusterVectors(vectors_array, &clusters, size, outputFile);
+    lloydAssignmentClusterVectors(vectors_array, &clusters, size);
     lloydAssignmentClusterVectorsUpdate(&clusters);
     counter++;
   }
@@ -86,7 +86,7 @@ vector<cluster_vectors> random_lloyd_pam_vector(vector_struct *vectors_array, cl
 
   outputFile << "clustering_time: " << (chrono::duration<double, milli>(diff).count()) / 1000 << " //seconds" << endl;
 
-  silhouetteResults = runSilhouetteForVectors(&clusters);
+  silhouetteResults = runSilhouetteForVectors(clusters, "silhouette", "RANDOM LLOYD PAM");
   return clusters;
 }
 
@@ -107,7 +107,7 @@ vector<cluster_vectors> kmeans_lloyd_pam_vector(vector_struct *vectors_array, cl
   while (compare_vectors_clusters(clusters, old_clusters) == true && counter < THRESHOLD)
   {
     old_clusters = copy_clusters_vector(&clusters);
-    lloydAssignmentClusterVectors(vectors_array, &clusters, size, outputFile);
+    lloydAssignmentClusterVectors(vectors_array, &clusters, size);
     lloydAssignmentClusterVectorsUpdate(&clusters);
     counter++;
   }
@@ -285,38 +285,19 @@ void pushLshResultsToClusterCurves(vector<curve> *curves, vector<int> results, c
   }
 }
 
-vector<float> runSilhouetteForVectors(vector<cluster_vectors> *clusters)
+vector<float> runSilhouetteForVectors(vector<cluster_vectors> clusters, char const *outfile, char const *case_name)
 {
-  vector<float> silhouetteResults;
-
-  double average = 0, distance = 0;
-  cout << "DEBUG 1" << endl;
-  for (int i = 0; i < clusters->size(); i++)
+  vector<float> result;
+  ofstream file;
+  file.open(outfile);
+  file << "Algorithm:  " << case_name << endl;
+  for (unsigned int i = 0; i < clusters.size(); i++)
   {
-    cout << "DEBUG 1A" << endl;
 
-    for (int j = 0; j < clusters->at(i).cluster_vectors[i]->vectors.size(); j++)
-    {
-      cout << "DEBUG 2" << endl;
-      for (int w = 0; w < clusters->at(i).cluster_vectors[j]->vectors.size(); w++)
-      {
-        cout << "DEBUG 3" << endl;
-
-        // if(clusters->at(i).cluster_vectors[w]->id != clusters->at(i).centerOfCluster->id)
-        // {
-        //distance = manhattanDistance(clusters->at(i).cluster_vectors[j]->vectors[j], clusters->at(i).cluster_vectors[w]->vectors);
-        cout << "distance: " << distance << endl;
-
-        //}
-      }
-      cout << "final distance: " << distance << endl;
-      average = distance / clusters->at(i).cluster_vectors[j]->vectors.size();
-      cout << "average distance: " << average << endl;
-      distance = 0;
-    }
+    file << "CLUSTER-" << i << "    "
+         << "{ size: " << clusters[i].cluster_vectors.size() << ", centroid: " << clusters[i].centerOfCluster->id << "}" << endl;
   }
-
-  return silhouetteResults;
+  return result;
 }
 
 vector<float> runSilhouetteForCurves(vector<cluster_curves> *clusters)
