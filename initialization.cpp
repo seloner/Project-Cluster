@@ -110,7 +110,6 @@ vector<cluster_vectors> random_selection_vector(vector_struct *vectors_array, un
     for (int i = 0; i < k; i++)
     {
         random_number = rand() % size;
-        cout << "Random Selection of Vector: " << vectors_array[random_number].id << endl;
         init_centre = &vectors_array[random_number];
         clusters[i].centerOfCluster = init_centre;
     }

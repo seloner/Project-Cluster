@@ -35,30 +35,30 @@ void lloydAssignmentClusterVectors(vector_struct *vectors_array, vector<cluster_
     double distance;
     int min_index, min_distance;
     //clear vectors
-    for (unsigned int i = 0; i < clusters->size(); i++)
-    {
-        clusters->at(i).cluster_vectors.clear();
-    }
+
     for (unsigned int i = 0; i < size; i++)
     {
-        for (unsigned int k = 0; k < clusters->size(); k++)
+        if (vectors_array[i].in_cluster == false)
         {
-            distance = manhattanDistance(clusters->at(k).centerOfCluster->vectors, vectors_array[i].vectors);
-            //set first as min
-            if (k == 0)
+            for (unsigned int k = 0; k < clusters->size(); k++)
             {
-                min_distance = distance;
-                min_index = k;
-            }
-            else
-            {
-                if (distance < min_distance)
+                distance = manhattanDistance(clusters->at(k).centerOfCluster->vectors, vectors_array[i].vectors);
+                //set first as min
+                if (k == 0)
                 {
                     min_distance = distance;
                     min_index = k;
                 }
+                else
+                {
+                    if (distance < min_distance)
+                    {
+                        min_distance = distance;
+                        min_index = k;
+                    }
+                }
             }
+            clusters->at(min_index).cluster_vectors.push_back(&(vectors_array[i]));
         }
-        clusters->at(min_index).cluster_vectors.push_back(&(vectors_array[i]));
     }
 }

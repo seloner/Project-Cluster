@@ -8,37 +8,15 @@
 
 vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size, curve *temp, char const *out_path)
 {
-  vector<cluster_curves> clusters;
-  vector<cluster_curves> old_clusters;
-  vector<cluster_curves> secondBetterCluster;
-
-  vector<float> silhouetteResults;
-
+  vector<cluster_curves> clusters, old_clusters;
   unsigned int THRESHOLD = 100, counter = 0;
   clusters = random_selection_curves(&curves, clusterInfo.number_of_clusters, size);
-  //arxikopoihsh old cluster (thelei allagi mporei h random na epistrepsei ta idia kentra )
   old_clusters = random_selection_curves(&curves, clusterInfo.number_of_clusters, size);
-
-  //clusters = random_selection_curves(&curves, clusterInfo.number_of_clusters, size);
-  // while (counter < 5)
-  // {
-  //     lloydAssignmentClusterCurves(&curves, &clusters, outputFile);
-
-  //     for (int i = 0; i < clusters.size(); i++)
-  //     {
-  //         cout << "Cluster: " << i << "  centre: " << clusters[i].centerOfCluster->id << endl;
-  //     }
-  //     lloydAssignmentClusterCurvesUpdate(&clusters);
-  //     counter++;
-  // }
-
   auto startC = chrono::steady_clock::now();
+
+  /* break when we rearch  threshhold or we get the same Centres  */
   while (compare_curves_clusters(clusters, old_clusters) == true && counter < 5)
   {
-    if (compare_curves_clusters(clusters, old_clusters) == false)
-    {
-      secondBetterCluster = copy_clusters_curves(&clusters);
-    }
     old_clusters = copy_clusters_curves(&clusters);
     lloydAssignmentClusterCurves(&curves, &clusters);
     lloydAssignmentClusterCurvesUpdate(&clusters);
@@ -47,7 +25,7 @@ vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clus
   auto endC = chrono::steady_clock::now();
   auto diff = endC - startC;
   double clustering_time = (chrono::duration<double, milli>(diff).count()) / 1000;
-  silhouetteResults = runSilhouetteForCurves(&clusters);
+  runSilhouetteForCurves(&clusters);
   return clusters;
 }
 
@@ -59,21 +37,14 @@ vector<cluster_vectors> random_lloyd_pam_vector(vector_struct *vectors_array, cl
 {
   vector<cluster_vectors> clusters;
   vector<cluster_vectors> old_clusters;
-  vector<cluster_vectors> secondBetterCluster;
-
-  vector<float> silhouetteResults;
   unsigned int THRESHOLD = 100, counter = 0;
   clusters = random_selection_vector(vectors_array, clusterInfo.number_of_clusters, size);
-  //arxikopoihsh old cluster (thelei allagi mporei h random na epistrepsei ta idia kentra )
   old_clusters = random_selection_vector(vectors_array, clusterInfo.number_of_clusters, size);
 
   auto startC = chrono::steady_clock::now();
   while (compare_vectors_clusters(clusters, old_clusters) == true && counter < THRESHOLD)
   {
-    if (compare_vectors_clusters(clusters, old_clusters) == false)
-    {
-      secondBetterCluster = copy_clusters_vector(&clusters);
-    }
+    init_cluster_lsh(&clusters);
     old_clusters = copy_clusters_vector(&clusters);
     lloydAssignmentClusterVectors(vectors_array, &clusters, size);
     lloydAssignmentClusterVectorsUpdate(&clusters);
@@ -82,7 +53,7 @@ vector<cluster_vectors> random_lloyd_pam_vector(vector_struct *vectors_array, cl
   auto endC = chrono::steady_clock::now();
   auto diff = endC - startC;
   double clustering_time = (chrono::duration<double, milli>(diff).count()) / 1000;
-  silhouetteResults = runSilhouetteForVectors(clusters, out_path, "RANDOM LLOYD PAM", clustering_time);
+  runSilhouetteForVectors(clusters, out_path, "RANDOM LLOYD PAM", clustering_time);
 
   return clusters;
 }
@@ -95,18 +66,16 @@ vector<cluster_vectors> kmeans_lloyd_pam_vector(vector_struct *vectors_array, cl
 {
   vector<cluster_vectors> clusters;
   vector<cluster_vectors> old_clusters;
-  vector<float> silhouetteResults;
   unsigned int THRESHOLD = 100, counter = 0;
   auto startC = chrono::steady_clock::now();
 
   clusters = k_means_vector(vectors_array, clusterInfo.number_of_clusters, size);
-  // arxikopoihsh old cluster (thelei allagi mporei h random na epistrepsei ta
-  // idia kentra )
   old_clusters = k_means_vector(vectors_array, clusterInfo.number_of_clusters, size);
-
+  /* break when we rearch  threshhold or we get the same Centres  */
   while (compare_vectors_clusters(clusters, old_clusters) == true && counter < THRESHOLD)
   {
     old_clusters = copy_clusters_vector(&clusters);
+    init_cluster_lsh(&clusters);
     lloydAssignmentClusterVectors(vectors_array, &clusters, size);
     lloydAssignmentClusterVectorsUpdate(&clusters);
     counter++;
@@ -114,8 +83,7 @@ vector<cluster_vectors> kmeans_lloyd_pam_vector(vector_struct *vectors_array, cl
   auto endC = chrono::steady_clock::now();
   auto diff = endC - startC;
   double clustering_time = (chrono::duration<double, milli>(diff).count()) / 1000;
-  silhouetteResults = runSilhouetteForVectors(clusters, out_path, "KMEANS LLOYD PAM", clustering_time);
-
+  runSilhouetteForVectors(clusters, out_path, "KMEANS LLOYD PAM", clustering_time);
   return clusters;
 }
 
@@ -153,21 +121,18 @@ vector<cluster_curves> kmeans_lloyd_pam_curve(vector<curve> curves, cluster clus
 /*                           KMEANS LSH PAM VECTORS                           */
 /* -------------------------------------------------------------------------- */
 
-vector<cluster_vectors> kmeans_lsh_pam_vector(vector_struct *vectors_array,
-                                              cluster clusterInfo,
-                                              unsigned int size)
+vector<cluster_vectors> kmeans_lsh_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size, char const *out_path)
 {
-  unsigned int m, M, HASH_TABLE_SIZE = size / 8;
-  int kDivisionExp;
-  vector<cluster_vectors> clusters;
+  unsigned int m, M, HASH_TABLE_SIZE = size / 8, THRESHOLD = 100, counter = 0;
+  int kDivisionExp, sum = 0;
+  vector<cluster_vectors> clusters, old_clusters;
   vector<vector<vector<int>>> siarrays;
   double w;
   vector<int> **hashtables;
-  hashtables = new vector<int> *[clusterInfo.number_of_vector_hash_tables];
   vector<int> lsh_matches;
   /* -------------------------------- LSH INITS -------------------------------
    */
-
+  auto startC = chrono::steady_clock::now();
   int dimension = vectors_array[0].vectors.size();
   m = pow(mBase, mExp) - mSub;
   kDivisionExp = mExp / clusterInfo.number_of_vector_hash_functions;
@@ -179,44 +144,124 @@ vector<cluster_vectors> kmeans_lsh_pam_vector(vector_struct *vectors_array,
   /* ----------------------------------  CLUSTER INIT
    * ---------------------------------- */
 
-  clusters =
-      k_means_vector(vectors_array, clusterInfo.number_of_clusters, size);
+  clusters = k_means_vector(vectors_array, clusterInfo.number_of_clusters, size);
+  old_clusters = k_means_vector(vectors_array, clusterInfo.number_of_clusters, size);
 
-  /* ------------------------- LSH HASHTABLES CREATION ------------------------
+  while (compare_vectors_clusters(clusters, old_clusters) == true && counter < THRESHOLD)
+  {
+    init_cluster_lsh(&clusters);
+    old_clusters = copy_clusters_vector(&clusters);
+    hashtables = new vector<int> *[clusterInfo.number_of_vector_hash_tables];
+    /* ------------------------- LSH HASHTABLES CREATION ------------------------
    */
 
-  for (unsigned i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
-  {
-    // generate Si
-    siarrays.push_back(generateSi(clusterInfo.number_of_vector_hash_functions, w, dimension));
-    // create the L hashtable
-    hashtables[i] = creteHashTable(HASH_TABLE_SIZE, dimension, vectors_array, size, clusterInfo.number_of_vector_hash_functions, w, M, m, siarrays[i]);
-  }
+    for (unsigned i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
+    {
+      // generate Si
+      siarrays.push_back(generateSi(clusterInfo.number_of_vector_hash_functions, w, dimension));
+      // create the L hashtable
+      hashtables[i] = creteHashTable(HASH_TABLE_SIZE, dimension, vectors_array, size, clusterInfo.number_of_vector_hash_functions, w, M, m, siarrays[i]);
+    }
 
-  /* ------------------------- LSH CLUSTER ASSIGNMENT -------------------------
+    /* ------------------------- LSH CLUSTER ASSIGNMENT -------------------------
    */
 
-  for (unsigned int i = 0; i < clusters.size(); i++)
-  {
-    lsh_matches = nearestVectors(siarrays, dimension, clusterInfo.number_of_vector_hash_functions, w, M, m, clusterInfo.number_of_vector_hash_tables, *(clusters[i].centerOfCluster), HASH_TABLE_SIZE, hashtables, vectors_array, size, 500);
-    cout << "-------------------------------------------\n"
-         << endl;
-    for (unsigned int l = 0; l < lsh_matches.size(); l++)
+    for (unsigned int i = 0; i < clusters.size(); i++)
+    {
+      lsh_matches = nearestVectors(siarrays, dimension, clusterInfo.number_of_vector_hash_functions, w, M, m, clusterInfo.number_of_vector_hash_tables, *(clusters[i].centerOfCluster), HASH_TABLE_SIZE, hashtables, vectors_array, size, 4000);
+      pushLshResultsToClusterVectors(vectors_array, lsh_matches, &clusters[i]);
+    }
+    lloydAssignmentClusterVectors(vectors_array, &clusters, size);
+    lloydAssignmentClusterVectorsUpdate(&clusters);
+
+    /* ------------------------------- FREE MEMORY ------------------------------
+   */
+    siarrays.clear();
+    for (unsigned int i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
     {
 
-      cout << "match position : " << lsh_matches[l] << endl;
+      delete[] hashtables[i];
     }
-    pushLshResultsToClusterVectors(vectors_array, lsh_matches, &clusters[i]);
+    delete[] hashtables;
   }
-  /* ------------------------------- FREE MEMORY ------------------------------
+  auto endC = chrono::steady_clock::now();
+  auto diff = endC - startC;
+  double clustering_time = (chrono::duration<double, milli>(diff).count()) / 1000;
+  runSilhouetteForVectors(clusters, out_path, "KMEANS LSH PAM", clustering_time);
+  return clusters;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                           KMEANS LSH PAM VECTORS                           */
+/* -------------------------------------------------------------------------- */
+
+vector<cluster_vectors> random_lsh_pam_vector(vector_struct *vectors_array, cluster clusterInfo, unsigned int size, char const *out_path)
+{
+  unsigned int m, M, HASH_TABLE_SIZE = size / 8, THRESHOLD = 100, counter = 0;
+  int kDivisionExp, sum = 0;
+  vector<cluster_vectors> clusters, old_clusters;
+  vector<vector<vector<int>>> siarrays;
+  double w;
+  vector<int> **hashtables;
+  vector<int> lsh_matches;
+  /* -------------------------------- LSH INITS -------------------------------
+   */
+  auto startC = chrono::steady_clock::now();
+  int dimension = vectors_array[0].vectors.size();
+  m = pow(mBase, mExp) - mSub;
+  kDivisionExp = mExp / clusterInfo.number_of_vector_hash_functions;
+  M = pow(mBase, kDivisionExp);
+  // calculate w
+  // // w = calculateW(size, vectors_array);
+  w = 5376.42;
+
+  /* ----------------------------------  CLUSTER INIT
+   * ---------------------------------- */
+
+  clusters = random_selection_vector(vectors_array, clusterInfo.number_of_clusters, size);
+  old_clusters = random_selection_vector(vectors_array, clusterInfo.number_of_clusters, size);
+
+  while (compare_vectors_clusters(clusters, old_clusters) == true && counter < THRESHOLD)
+  {
+    init_cluster_lsh(&clusters);
+    old_clusters = copy_clusters_vector(&clusters);
+    hashtables = new vector<int> *[clusterInfo.number_of_vector_hash_tables];
+    /* ------------------------- LSH HASHTABLES CREATION ------------------------
    */
 
-  for (unsigned int i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
-  {
+    for (unsigned i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
+    {
+      // generate Si
+      siarrays.push_back(generateSi(clusterInfo.number_of_vector_hash_functions, w, dimension));
+      // create the L hashtable
+      hashtables[i] = creteHashTable(HASH_TABLE_SIZE, dimension, vectors_array, size, clusterInfo.number_of_vector_hash_functions, w, M, m, siarrays[i]);
+    }
 
-    delete[] hashtables[i];
+    /* ------------------------- LSH CLUSTER ASSIGNMENT -------------------------
+   */
+
+    for (unsigned int i = 0; i < clusters.size(); i++)
+    {
+      lsh_matches = nearestVectors(siarrays, dimension, clusterInfo.number_of_vector_hash_functions, w, M, m, clusterInfo.number_of_vector_hash_tables, *(clusters[i].centerOfCluster), HASH_TABLE_SIZE, hashtables, vectors_array, size, 4000);
+      pushLshResultsToClusterVectors(vectors_array, lsh_matches, &clusters[i]);
+    }
+    lloydAssignmentClusterVectors(vectors_array, &clusters, size);
+    lloydAssignmentClusterVectorsUpdate(&clusters);
+
+    /* ------------------------------- FREE MEMORY ------------------------------
+   */
+    siarrays.clear();
+    for (unsigned int i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
+    {
+
+      delete[] hashtables[i];
+    }
+    delete[] hashtables;
   }
-  delete[] hashtables;
+  auto endC = chrono::steady_clock::now();
+  auto diff = endC - startC;
+  double clustering_time = (chrono::duration<double, milli>(diff).count()) / 1000;
+  runSilhouetteForVectors(clusters, out_path, "KMEANS LSH PAM", clustering_time);
   return clusters;
 }
 
@@ -240,12 +285,13 @@ bool compare_vectors_clusters(vector<cluster_vectors> current, vector<cluster_ve
   bool flag = 0;
   for (unsigned int i = 0; i < current.size(); i++)
   {
-    if (current[i].centerOfCluster != old[i].centerOfCluster)
+    if (current[i].centerOfCluster->id != old[i].centerOfCluster->id)
     {
       flag = 1;
       break;
     }
   }
+
   return flag;
 }
 
@@ -276,9 +322,14 @@ bool compare_curves_clusters(vector<cluster_curves> current,
 
 void pushLshResultsToClusterVectors(vector_struct *vectors_array, vector<int> results, cluster_vectors *cluster)
 {
+  cout << "size: " << results.size() << endl;
   for (unsigned int i = 0; i < results.size(); i++)
   {
-    cluster->cluster_vectors.push_back(&(vectors_array[results[i]]));
+    if (vectors_array[results[i]].in_cluster == 0)
+    {
+      cluster->cluster_vectors.push_back(&(vectors_array[results[i]]));
+      vectors_array[results[i]].in_cluster = 1;
+    }
   }
 }
 
@@ -290,9 +341,8 @@ void pushLshResultsToClusterCurves(vector<curve> *curves, vector<int> results, c
   }
 }
 
-vector<float> runSilhouetteForVectors(vector<cluster_vectors> clusters, char const *outfile, char const *case_name, double clustering_time)
+void runSilhouetteForVectors(vector<cluster_vectors> clusters, char const *outfile, char const *case_name, double clustering_time)
 {
-  vector<float> result;
   vector<vector<Silhouette>> a_b_results;
   vector<double> s_results;
   double s_average = 0;
@@ -318,10 +368,9 @@ vector<float> runSilhouetteForVectors(vector<cluster_vectors> clusters, char con
   s_average = s_average / s_results.size();
   file << s_average << "]" << endl;
   file.close();
-  return result;
 }
 
-vector<float> runSilhouetteForCurves(vector<cluster_curves> *clusters)
+void runSilhouetteForCurves(vector<cluster_curves> *clusters)
 {
   vector<float> silhouetteResults;
 
@@ -351,8 +400,6 @@ vector<float> runSilhouetteForCurves(vector<cluster_curves> *clusters)
     distance = 0;
     // }
   }
-
-  return silhouetteResults;
 }
 
 vector<Silhouette> calculate_a_b_vectors(vector<cluster_vectors> clusters, cluster_vectors current_cluster, unsigned int current_cluster_index)
@@ -462,4 +509,17 @@ double calculateSVectors(vector<Silhouette> a_b_vector)
   }
   s = sum / (a_b_vector.size() - 1);
   return s;
+}
+
+void init_cluster_lsh(vector<cluster_vectors> *clusters)
+{
+
+  for (unsigned int i = 0; i < clusters->size(); i++)
+  {
+    for (unsigned int j = 0; j < clusters->at(i).cluster_vectors.size(); j++)
+    {
+      clusters->at(i).cluster_vectors[j]->in_cluster = false;
+    }
+    clusters->at(i).cluster_vectors.clear();
+  }
 }
