@@ -1,6 +1,6 @@
 #include "assignment.h"
 
-void lloydAssignmentClusterCurves(vector<curve> *curves, vector<cluster_curves> *curves_clusters, ofstream &outputFile)
+void lloydAssignmentClusterCurves(vector<curve> *curves, vector<cluster_curves> *curves_clusters)
 {
     double distance;
     int min_index, min_distance;
@@ -28,13 +28,6 @@ void lloydAssignmentClusterCurves(vector<curve> *curves, vector<cluster_curves> 
         //push curve to the closest cluster
         curves_clusters->at(min_index).cluster_curves.push_back(&curves->at(i));
     }
-    //Silhouette
-    for (int loop = 0; loop < curves_clusters->size(); loop++)
-    {
-        outputFile << "CLUSTER-" << loop + 1 << "{"
-                   << "size: " << curves_clusters->at(loop).cluster_curves.size() << ", centroid: " << curves_clusters->at(loop).centerOfCluster->id << "}" << endl;
-    }
-    outputFile << endl;
 }
 
 void lloydAssignmentClusterVectors(vector_struct *vectors_array, vector<cluster_vectors> *clusters, unsigned int size)
