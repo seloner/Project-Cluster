@@ -41,7 +41,7 @@ void calculateCurveDimensions(char *path, vector<curve> &curves, int number_of_l
             {
                 curves.push_back(curve());
                 curves[i].id = number;
-                curves[i].intoCluster = 0;
+                curves[i].in_cluster = false;
                 // cout << "curves[" << i << "].id: " << curves[i].id << endl;
             }
             if (countKena == 1)

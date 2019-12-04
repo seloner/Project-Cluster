@@ -19,7 +19,7 @@ typedef struct Curve
 {
     int id;
     int dimensions;
-    int intoCluster;
+    bool in_cluster;
     vector<point> vectorPoins;
 } curve;
 // void calculateCurveDimensions(char *path, vector<curve> &curves, int number_of_lines);

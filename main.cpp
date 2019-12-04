@@ -79,16 +79,12 @@ int main(int argc, char const *argv[])
     }
     else // case type is curve
     {
-        curve *array_of_curves = new curve[INPUT_SIZE];
-        for (unsigned int i = 0; i < curves.size(); i++)
-        {
-            array_of_curves[i] = curves[i];
-        }
+
         calculateCurveDimensions(INPUT_PATH, curves, INPUT_SIZE);
         fillVectorWithCurves(INPUT_PATH, curves, INPUT_SIZE);
-        //curves_clusters = random_lloyd_pam_curve(curves, clusterInfo, INPUT_SIZE, array_of_curves, OUTPUT_PATH);
-        curves_clusters = random_lsh_pam_curve(curves, clusterInfo, INPUT_SIZE, OUTPUT_PATH);
-        //curves_clusters = kmeans_lloyd_pam_curve(curves, clusterInfo, INPUT_SIZE, array_of_curves);
+        // curves_clusters = random_lloyd_pam_curve(curves, clusterInfo, OUTPUT_PATH);
+        // curves_clusters = random_lsh_pam_curve(curves, clusterInfo, INPUT_SIZE, OUTPUT_PATH);
+        curves_clusters = kmeans_lloyd_pam_curve(curves, clusterInfo, OUTPUT_PATH);
     }
 
     /**
