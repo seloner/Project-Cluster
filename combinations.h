@@ -24,6 +24,7 @@ vector<cluster_vectors> random_lsh_pam_vector(vector_struct *vectors_array, clus
 /* curves */
 vector<cluster_curves> random_lloyd_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size, curve *temp, char const *out_path);
 vector<cluster_curves> kmeans_lloyd_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size, curve *temp);
+vector<cluster_curves> random_lsh_pam_curve(vector<curve> curves, cluster clusterInfo, unsigned int size, char const *out_path);
 
 /* helpers */
 
