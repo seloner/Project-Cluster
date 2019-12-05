@@ -2,6 +2,7 @@
 #include <random>
 #include <iostream>
 #include <vector>
+
 using namespace std;
 t generate_t()
 {
@@ -107,5 +108,24 @@ void check_dimensions(grid_vectors grid_vectors)
     for (i = 0; i < grid_vectors.vectors.size(); i++)
     {
         cout << "i:" << i << "   " << grid_vectors.vectors[i].size() << endl;
+    }
+}
+
+void grid_vectors_to_vectors(grid_vectors grid_vectors, vector_struct *vectors_array)
+{
+
+    for (unsigned int i = 0; i < grid_vectors.vectors.size(); i++)
+    {
+        for (unsigned int j = 0; j < grid_vectors.vectors[i].size(); j++)
+        {
+            if (j == 0)
+            {
+                auto string_id = to_string((unsigned int)grid_vectors.vectors[i][j]);
+                vectors_array[i].id = string_id;
+                vectors_array[i].in_cluster = false;
+            }
+            else
+                vectors_array[i].vectors.push_back(grid_vectors.vectors[i][j]);
+        }
     }
 }

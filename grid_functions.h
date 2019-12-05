@@ -1,6 +1,9 @@
 #ifndef grid_functions_H_
 #define grid_functions_H_
 #include "curves.h"
+#include "vector.h"
+#include <string>
+
 typedef struct t
 {
     double x;
@@ -26,4 +29,6 @@ int find_match(vector<point> points, point match);
 int calculate_max_dimension(grid_vectors grid_vectors);
 void padding(grid_vectors *grid_vectors, double padding_value, int dimension);
 void check_dimensions(grid_vectors grid_vectors);
+void grid_vectors_to_vectors(grid_vectors grid_vectors, vector_struct *vectors_array);
+
 #endif

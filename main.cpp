@@ -74,7 +74,7 @@ int main(int argc, char const *argv[])
         fillVectors(DIMENSIONS, INPUT_SIZE, INPUT_PATH, array_of_vectors);
         // vectors_clusters = random_lloyd_pam_vector(array_of_vectors, clusterInfo, INPUT_SIZE, OUTPUT_PATH);
         // vectors_clusters = kmeans_lsh_pam_vector(array_of_vectors, clusterInfo, INPUT_SIZE, OUTPUT_PATH);
-        vectors_clusters = random_lsh_pam_vector(array_of_vectors, clusterInfo, INPUT_SIZE, OUTPUT_PATH);
+        // vectors_clusters = random_lsh_pam_vector(array_of_vectors, clusterInfo, INPUT_SIZE, OUTPUT_PATH);
         // vectors_clusters = kmeans_lloyd_pam_vector(array_of_vectors, clusterInfo, INPUT_SIZE, OUTPUT_PATH);
     }
     else // case type is curve
@@ -83,10 +83,8 @@ int main(int argc, char const *argv[])
         calculateCurveDimensions(INPUT_PATH, curves, INPUT_SIZE);
         fillVectorWithCurves(INPUT_PATH, curves, INPUT_SIZE);
         // curves_clusters = random_lloyd_pam_curve(curves, clusterInfo, OUTPUT_PATH);
-        cout << "hi" <<endl;
         curves_clusters = random_lsh_pam_curve(curves, clusterInfo, INPUT_SIZE, OUTPUT_PATH);
-        cout << "hi 2" <<endl;
-        //curves_clusters = kmeans_lloyd_pam_curve(curves, clusterInfo, OUTPUT_PATH);
+        // curves_clusters = kmeans_lloyd_pam_curve(curves, clusterInfo, OUTPUT_PATH);
     }
 
     /**
