@@ -116,7 +116,7 @@ vector<cluster_curves> kmeans_lloyd_pam_curve(vector<curve> curves, cluster clus
   auto endC = chrono::steady_clock::now();
   auto diff = endC - startC;
   double clustering_time = (chrono::duration<double, milli>(diff).count()) / 1000;
-  runSilhouetteForCurves(clusters, out_path, "RANDOM LLOYD PAM", clustering_time);
+  runSilhouetteForCurves(clusters, out_path, "KMEANS LLOYD PAM", clustering_time);
   return clusters;
 }
 
