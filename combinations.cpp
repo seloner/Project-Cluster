@@ -281,10 +281,24 @@ vector<cluster_curves> random_lsh_pam_curve(vector<curve> curves_array, cluster 
   double w;
   vector<int> **hashtables;
   vector<int> lsh_matches;
+  t *t_array;
+  grid_vectors *grid_vectors_array;
+  grid_vectors *grid_vectors_query;
+
+  vector<curve> queryCurves;
+
   /* -------------------------------- LSH INITS -------------------------------
    */
+  //allocate t_array
+  t_array = new t[clusterInfo.number_of_vector_hash_tables];
+
+  grid_vectors_array = new grid_vectors[clusterInfo.number_of_vector_hash_tables];
+
+  vector<int> dimensionsTable;
   auto startC = chrono::steady_clock::now();
   int dimension = curves_array[0].vectorPoins.size();
+  int max_dimension = 0;
+  double delta = 0.0005;
   m = pow(mBase, mExp) - mSub;
   kDivisionExp = mExp / clusterInfo.number_of_vector_hash_functions;
   M = pow(mBase, kDivisionExp);
@@ -292,53 +306,81 @@ vector<cluster_curves> random_lsh_pam_curve(vector<curve> curves_array, cluster 
   // // w = calculateW(size, vectors_array);
   w = 5376.42;
 
+  for (int i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
+  {
+    t_array[i] = generate_t();
+  }
+
   /* ----------------------------------  CLUSTER INIT   * ---------------------------------- */
 
   clusters = random_selection_curves(&curves_array, clusterInfo.number_of_clusters, size);
   old_clusters = random_selection_curves(&curves_array, clusterInfo.number_of_clusters, size);
 
-  // while (compare_curves_clusters(clusters, old_clusters) == true && counter < THRESHOLD)
-  // {
-  //   init_clusters_vectors(&clusters);
-  //   old_clusters = copy_clusters_vector(&clusters);
-  //   hashtables = new vector<int> *[clusterInfo.number_of_vector_hash_tables];
-  //   /* ------------------------- LSH HASHTABLES CREATION ------------------------
-  //  */
+  while (compare_curves_clusters(clusters, old_clusters) == true && counter < THRESHOLD)
+  {
+    init_clusters_curves(&clusters);
+    old_clusters = copy_clusters_curves(&clusters);
+    hashtables = new vector<int> *[clusterInfo.number_of_vector_hash_tables];
+    /* ------------------------- LSH HASHTABLES CREATION ------------------------
+   */
+    cout << "DEBUG 1"<<endl;
+    for (unsigned i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
+    {
+          //create a grid vectors array and match evey curve to the L grid
+        grid_vectors_array[i] = curve_to_grid(curves_array, size, t_array[i], delta);
+        //calculate the max dimesion of the vector inside L grid vectors
+        max_dimension = calculate_max_dimension(grid_vectors_array[i]);
+        //push it into the dimension table
+        dimensionsTable.push_back(max_dimension);
+        //padding
+        padding(&(grid_vectors_array[i]), 100000, dimensionsTable[i]);
+        //generate si arrays
+        siarrays.push_back(generateSi(clusterInfo.number_of_vector_hash_functions, w, dimensionsTable[i] - 1));
+        //create hashtable
+        hashtables[i] = creteHashTablev2(HASH_TABLE_SIZE, dimensionsTable[i], grid_vectors_array[i].vectors, clusterInfo.number_of_vector_hash_functions, w, M, m, siarrays[i]);
+    }
+    cout << "DEBUG 2"<<endl;
+    grid_vectors_query = new grid_vectors[clusterInfo.number_of_vector_hash_tables];
+    
+    ///PROSOXI TODO ta query curves einai ta kentra poy allazoun ?
+    //queryCurves.push_back(*clusters.at(0).centerOfCluster);
+    for (int i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
+    {
+        //create a grid vectors array and match evey curve to the L grid
+        grid_vectors_query[0] = curve_to_grid(queryCurves, 1, t_array[i], delta);
+        //padding
+        padding(&(grid_vectors_query[0]), 100000, dimensionsTable[i]);
+    }
 
-  //   for (unsigned i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
-  //   {
-  //     // generate Si
-  //     siarrays.push_back(generateSi(clusterInfo.number_of_vector_hash_functions, w, dimension));
-  //     // create the L hashtable
-  //     hashtables[i] = creteHashTable(HASH_TABLE_SIZE, dimension, vectors_array, size, clusterInfo.number_of_vector_hash_functions, w, M, m, siarrays[i]);
-  //   }
+    /* ------------------------- LSH CLUSTER ASSIGNMENT -------------------------
+   */
+    cout << "DEBUG 3"<<endl;
 
-  //   /* ------------------------- LSH CLUSTER ASSIGNMENT -------------------------
-  //  */
+    for (unsigned int i = 0; i < clusters.size(); i++)
+    {
+      
+      lsh_matches = nearestCurves(siarrays, dimensionsTable, clusterInfo.number_of_vector_hash_functions, w, M, m, *(clusters[i].centerOfCluster), curves_array, clusterInfo.number_of_vector_hash_tables, grid_vectors_query, HASH_TABLE_SIZE, hashtables);
 
-  //   for (unsigned int i = 0; i < clusters.size(); i++)
-  //   {
-  //     lsh_matches = nearestVectors(siarrays, dimension, clusterInfo.number_of_vector_hash_functions, w, M, m, clusterInfo.number_of_vector_hash_tables, *(clusters[i].centerOfCluster), HASH_TABLE_SIZE, hashtables, vectors_array, size, 4000);
-  //     pushLshResultsToClusterVectors(vectors_array, lsh_matches, &clusters[i]);
-  //   }
-  //   lloydAssignmentClusterVectors(vectors_array, &clusters, size);
-  //   lloydAssignmentClusterVectorsUpdate(&clusters);
+      pushLshResultsToClusterCurves(&curves_array, lsh_matches, &clusters[i]);
+    }
+    lloydAssignmentClusterCurves(&curves_array, &clusters);
+    lloydAssignmentClusterCurvesUpdate(&clusters);
 
-  //   /* ------------------------------- FREE MEMORY ------------------------------
-  //  */
-  //   siarrays.clear();
-  //   for (unsigned int i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
-  //   {
+    /* ------------------------------- FREE MEMORY ------------------------------
+   */
+    siarrays.clear();
+    for (unsigned int i = 0; i < clusterInfo.number_of_vector_hash_tables; i++)
+    {
 
-  //     delete[] hashtables[i];
-  //   }
-  //   delete[] hashtables;
-  // }
-  // auto endC = chrono::steady_clock::now();
-  // auto diff = endC - startC;
-  // double clustering_time = (chrono::duration<double, milli>(diff).count()) / 1000;
-  // runSilhouetteForVectors(clusters, out_path, "KMEANS LSH PAM", clustering_time);
-  // return clusters;
+      delete[] hashtables[i];
+    }
+    delete[] hashtables;
+  }
+  auto endC = chrono::steady_clock::now();
+  auto diff = endC - startC;
+  double clustering_time = (chrono::duration<double, milli>(diff).count()) / 1000;
+  runSilhouetteForCurves(clusters, out_path, "RANDOM LSH PAM CURVES", clustering_time);
+  return clusters;
 }
 
 /* -------------------------------------------------------------------------- */

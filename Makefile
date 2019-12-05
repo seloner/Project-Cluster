@@ -1,6 +1,6 @@
-OBJS 	= main.o readFunctions.o vector.o printFunctions.o  initialization.o metrics.o assignment.o curves.o dtw.o update.o combinations.o lsh.o
-SOURCE	= main.cpp readFunctions.cpp vector.cpp printFunctions.cpp initialization.cpp metrics.cpp assignment.cpp curves.cpp dtw.cpp update.cpp combinations.cpp lsh.cpp
-HEADER  = readFunctions.h vector.h printFunctions.h initialization.h clusterStructs.h metrics.h assignment.h curves.h dtw.h update.h combinations.h	lsh.h
+OBJS 	= main.o readFunctions.o vector.o printFunctions.o  initialization.o metrics.o assignment.o curves.o dtw.o update.o combinations.o lsh.o grid_functions.o
+SOURCE	= main.cpp readFunctions.cpp vector.cpp printFunctions.cpp initialization.cpp metrics.cpp assignment.cpp curves.cpp dtw.cpp update.cpp combinations.cpp lsh.cpp grid_functions.cpp
+HEADER  = readFunctions.h vector.h printFunctions.h initialization.h clusterStructs.h metrics.h assignment.h curves.h dtw.h update.h combinations.h	lsh.h grid_functions.h
 OUT  	= cluster
 FLAGS   = -g -c
 CC	= g++
@@ -35,6 +35,10 @@ dtw.o: dtw.cpp
 	$(CC)  $(FLAGS) dtw.cpp
 combinations.o: combinations.cpp
 	$(CC)  $(FLAGS) combinations.cpp
+
+grid_functions.o: grid_functions.cpp
+	$(CC)  $(FLAGS) grid_functions.cpp
+		
 clean:
 	rm -f $(OBJS) $(OUT)
 

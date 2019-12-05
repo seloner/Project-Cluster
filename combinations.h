@@ -8,6 +8,8 @@
 #include "initialization.h"
 #include "update.h"
 #include "lsh.h"
+#include "grid_functions.h"
+
 using namespace std;
 
 typedef struct Silhouette

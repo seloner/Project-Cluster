@@ -30,5 +30,4 @@ void bruteForceCurves(int d, int size, char *input_file_path, char *query_file_p
 void calculateCurveDimensions(char *path, vector<curve> &curves, int number_of_lines);
 void printCurves(vector<curve> curves, int number_of_lines);
 void fillVectorWithCurves(char *path, vector<curve> &curves, int number_of_lines);
-
 #endif
